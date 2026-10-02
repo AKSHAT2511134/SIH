@@ -1,0 +1,526 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PashuSetu — Sign In</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', -apple-system, sans-serif;
+    background: #F8FAFC;
+    color: #1F2A24;
+    min-height: 100vh;
+  }
+ 
+  /* NAVBAR (matches interface.html) */
+  nav {
+    background: #fff;
+    border-bottom: 1px solid #E5E7EB;
+    padding: 0 32px;
+  }
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #1B2A4A;
+  }
+  .logo-mark {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #1B2A4A, #2F4A3C);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .logo-text { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+  .logo-text span { color: #B8863B; }
+  .back-link {
+    font-size: 13px;
+    font-weight: 600;
+    color: #5B6560;
+    text-decoration: none;
+  }
+  .back-link:hover { color: #1B2A4A; }
+ 
+  /* SPLIT LAYOUT */
+  .wrap {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 56px 24px;
+    display: grid;
+    grid-template-columns: 1fr 0.85fr;
+    min-height: calc(100vh - 65px - 112px);
+    align-items: center;
+    gap: 0;
+  }
+ 
+  /* FORM SIDE */
+  .form-panel {
+    background: #fff;
+    border: 1px solid #E5E7EB;
+    border-radius: 18px 0 0 18px;
+    padding: 44px 40px;
+    box-shadow: 0 24px 60px rgba(27, 42, 74, 0.08);
+  }
+  .tabs {
+    display: flex;
+    background: #F2F2EF;
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 28px;
+  }
+  .tab-btn {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 10px 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: #5B6560;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tab-btn.active {
+    background: #1B2A4A;
+    color: #fff;
+  }
+  .panel-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #1B2A4A;
+    letter-spacing: -0.4px;
+    margin-bottom: 6px;
+  }
+  .panel-sub {
+    font-size: 13px;
+    color: #5B6560;
+    margin-bottom: 26px;
+  }
+  .field { margin-bottom: 16px; }
+  .field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #1B2A4A;
+    margin-bottom: 6px;
+  }
+  .field input, .field select {
+    width: 100%;
+    padding: 11px 13px;
+    border: 1.5px solid #D9DEE8;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #1F2A24;
+    background: #fff;
+    transition: border-color 0.15s;
+  }
+  .field input:focus, .field select:focus {
+    outline: none;
+    border-color: #1B2A4A;
+  }
+  .row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .field-hint {
+    font-size: 11px;
+    color: #8A9490;
+    margin-top: 5px;
+  }
+  .form-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 4px 0 22px;
+    font-size: 12px;
+  }
+  .form-foot a { color: #B8863B; font-weight: 600; text-decoration: none; }
+  .form-foot a:hover { text-decoration: underline; }
+  .remember { display: flex; align-items: center; gap: 6px; color: #5B6560; font-weight: 500; }
+  .btn-submit {
+    width: 100%;
+    padding: 13px;
+    background: #1B2A4A;
+    color: #fff;
+    border: none;
+    border-radius: 9px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-submit:hover { background: #0F1A2E; transform: translateY(-1px); }
+  .error-msg {
+    background: #FEE2E2;
+    color: #B91C1C;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    display: none;
+  }
+  .success-msg {
+    background: #DCE8DE;
+    color: #2F4A3C;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    display: none;
+  }
+  .demo-note {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid #F2F2EF;
+    font-size: 11px;
+    color: #8A9490;
+    line-height: 1.6;
+  }
+  .demo-note b { color: #5B6560; }
+ 
+  form { display: none; }
+  form.active { display: block; }
+ 
+  /* ID CARD SIDE (echoes Pashu Aadhaar ear-tag identity concept) */
+  .id-panel {
+    background: linear-gradient(160deg, #1B2A4A 0%, #14213B 55%, #0F1A2E 100%);
+    border-radius: 0 18px 18px 0;
+    padding: 44px 36px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .id-panel::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 220px; height: 220px;
+    background: radial-gradient(circle, rgba(184,134,59,0.18), transparent 70%);
+  }
+  .id-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: #FDE8C7;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .id-eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: #B8863B; }
+  .id-panel h2 {
+    color: #fff;
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1.3;
+    letter-spacing: -0.4px;
+    margin-bottom: 14px;
+  }
+  .id-panel p {
+    color: #B7C1D6;
+    font-size: 13px;
+    line-height: 1.65;
+    margin-bottom: 28px;
+  }
+ 
+  /* mock ID card, deliberately styled like the Pashu Aadhaar tag chip in the hero preview */
+  .mock-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 14px;
+    padding: 18px;
+    backdrop-filter: blur(6px);
+  }
+  .mock-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+  .mock-card-tag {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: #FDE8C7;
+    background: rgba(184,134,59,0.16);
+    border: 1px solid rgba(184,134,59,0.4);
+    padding: 4px 9px;
+    border-radius: 6px;
+    font-weight: 700;
+  }
+  .mock-card-role {
+    font-size: 10px;
+    color: #8E9BB3;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .mock-card-name {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 3px;
+  }
+  .mock-card-sub {
+    color: #8E9BB3;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .mock-card-strip {
+    margin-top: 14px;
+    height: 6px;
+    border-radius: 20px;
+    background: repeating-linear-gradient(90deg, #B8863B 0 8px, transparent 8px 14px);
+    opacity: 0.5;
+  }
+ 
+  /* FOOTER */
+  footer {
+    background: #1B2A4A;
+    color: #8E9BB3;
+    padding: 28px 32px;
+    text-align: center;
+    font-size: 13px;
+  }
+  footer strong { color: #C7D0E0; }
+ 
+  @media (max-width: 860px) {
+    .wrap { grid-template-columns: 1fr; padding: 32px 20px; }
+    .form-panel { border-radius: 18px 18px 0 0; padding: 32px 26px; }
+    .id-panel { border-radius: 0 0 18px 18px; padding: 32px 26px; }
+    .row-2 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+ 
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="interface.html">
+      <div class="logo-mark">🐄</div>
+      <div class="logo-text">Pashu<span>Setu</span></div>
+    </a>
+    <a class="back-link" href="interface.html">← Back to Portal Home</a>
+  </div>
+</nav>
+ 
+<div class="wrap">
+  <!-- FORM PANEL -->
+  <div class="form-panel">
+    <div class="tabs">
+      <button class="tab-btn active" id="tabSignIn" onclick="switchTab('signin')">Sign In</button>
+      <button class="tab-btn" id="tabSignUp" onclick="switchTab('signup')">Sign Up</button>
+    </div>
+ 
+    <!-- SIGN IN -->
+    <form id="signinForm" class="active" onsubmit="return handleSignIn(event)">
+      <div class="panel-title">Welcome back</div>
+      <div class="panel-sub">Sign in with your PashuSetu User ID to continue.</div>
+ 
+      <div class="error-msg" id="signinError">Invalid User ID or password. Try again.</div>
+ 
+      <div class="field">
+        <label for="si-userid">User ID</label>
+        <input type="text" id="si-userid" placeholder="e.g. FARM-2291 or VET-0148" required>
+      </div>
+      <div class="field">
+        <label for="si-password">Password</label>
+        <input type="password" id="si-password" placeholder="Enter your password" required>
+      </div>
+      <div class="field">
+        <label for="si-role">Login as</label>
+        <select id="si-role" required>
+          <option value="">Select your role</option>
+          <option value="farmer-dashboard.html">Farmer</option>
+          <option value="vet-dashboard.html">Veterinarian</option>
+          <option value="procurement">Dairy / Procurement</option>
+          <option value="lab">Laboratory</option>
+          <option value="government">Government</option>
+        </select>
+      </div>
+ 
+      <div class="form-foot">
+        <label class="remember"><input type="checkbox" style="width:auto;"> Remember me</label>
+        <a href="#">Forgot password?</a>
+      </div>
+ 
+      <button type="submit" class="btn-submit">Sign In →</button>
+ 
+      <div class="demo-note">
+        <b>Demo credentials:</b> User ID <b>FARM-2291</b> or <b>VET-0148</b>, password <b>demo123</b>.
+        Other roles are placeholders until those dashboards are built.
+      </div>
+    </form>
+ 
+    <!-- SIGN UP -->
+    <form id="signupForm" onsubmit="return handleSignUp(event)">
+      <div class="panel-title">Create your account</div>
+      <div class="panel-sub">Register to get a PashuSetu User ID for your role.</div>
+ 
+      <div class="success-msg" id="signupSuccess">Account created. You can now sign in.</div>
+ 
+      <div class="field">
+        <label for="su-name">Full name</label>
+        <input type="text" id="su-name" placeholder="Your full name" required>
+      </div>
+      <div class="row-2">
+        <div class="field">
+          <label for="su-userid">Choose a User ID</label>
+          <input type="text" id="su-userid" placeholder="e.g. FARM-2292" required>
+        </div>
+        <div class="field">
+          <label for="su-role">Role</label>
+          <select id="su-role" required>
+            <option value="">Select role</option>
+            <option value="farmer-dashboard.html">Farmer</option>
+            <option value="vet-dashboard.html">Veterinarian</option>
+            <option value="procurement">Dairy / Procurement</option>
+            <option value="lab">Laboratory</option>
+            <option value="government">Government</option>
+          </select>
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="field">
+          <label for="su-password">Password</label>
+          <input type="password" id="su-password" placeholder="Create a password" required>
+        </div>
+        <div class="field">
+          <label for="su-password2">Confirm password</label>
+          <input type="password" id="su-password2" placeholder="Re-enter password" required>
+        </div>
+      </div>
+      <div class="field-hint" style="margin-bottom:18px;">Minimum 6 characters. This is a prototype — accounts aren't persisted anywhere.</div>
+ 
+      <button type="submit" class="btn-submit">Create Account →</button>
+    </form>
+  </div>
+ 
+  <!-- ID CARD PANEL -->
+  <div class="id-panel">
+    <div class="id-eyebrow"><span class="id-eyebrow-dot"></span> Digital Identity</div>
+    <h2>One ID, every role in the compliance chain.</h2>
+    <p>Just like every animal gets a Pashu Aadhaar ear tag, every person on PashuSetu — farmer, vet, lab, or officer — gets a verified digital ID to sign, trace, and act.</p>
+ 
+    <div class="mock-card">
+      <div class="mock-card-top">
+        <div class="mock-card-tag" id="previewTag">ID · —</div>
+        <div class="mock-card-role" id="previewRole">ROLE PENDING</div>
+      </div>
+      <div class="mock-card-name" id="previewName">Your Name</div>
+      <div class="mock-card-sub">PashuSetu Verified Account</div>
+      <div class="mock-card-strip"></div>
+    </div>
+  </div>
+</div>
+ 
+<footer>
+  <strong>PashuSetu</strong> — Built on Bharat Pashudhan · Compliance data never stored in QR · CDSCO/FSSAI referenced
+</footer>
+ 
+<script>
+  function switchTab(which) {
+    const isSignIn = which === 'signin';
+    document.getElementById('tabSignIn').classList.toggle('active', isSignIn);
+    document.getElementById('tabSignUp').classList.toggle('active', !isSignIn);
+    document.getElementById('signinForm').classList.toggle('active', isSignIn);
+    document.getElementById('signupForm').classList.toggle('active', !isSignIn);
+  }
+ 
+  // Demo credential store (front-end only, not persisted, for prototype purposes)
+  const demoUsers = {
+    'FARM-2291': { password: 'demo123', name: 'Ramesh Singh', role: 'farmer-dashboard.html', roleLabel: 'FARMER' },
+    'VET-0148':  { password: 'demo123', name: 'Dr. Anjali Verma', role: 'vet-dashboard.html', roleLabel: 'VETERINARIAN' }
+  };
+ 
+  function handleSignIn(e) {
+    e.preventDefault();
+    const id = document.getElementById('si-userid').value.trim().toUpperCase();
+    const pw = document.getElementById('si-password').value;
+    const roleChoice = document.getElementById('si-role').value;
+    const errBox = document.getElementById('signinError');
+ 
+    const user = demoUsers[id];
+    if (!user || user.password !== pw) {
+      errBox.style.display = 'block';
+      errBox.textContent = 'Invalid User ID or password. Try again.';
+      return false;
+    }
+    if (!roleChoice) {
+      errBox.style.display = 'block';
+      errBox.textContent = 'Please select a role to continue.';
+      return false;
+    }
+    errBox.style.display = 'none';
+ 
+    if (roleChoice.endsWith('.html')) {
+      window.location.href = roleChoice;
+    } else {
+      alert('That role dashboard is still coming soon. Try Farmer or Veterinarian for the live demo.');
+    }
+    return false;
+  }
+ 
+  function handleSignUp(e) {
+    e.preventDefault();
+    const pw = document.getElementById('su-password').value;
+    const pw2 = document.getElementById('su-password2').value;
+    const successBox = document.getElementById('signupSuccess');
+ 
+    if (pw.length < 6) {
+      alert('Password must be at least 6 characters.');
+      return false;
+    }
+    if (pw !== pw2) {
+      alert('Passwords do not match.');
+      return false;
+    }
+    successBox.style.display = 'block';
+    setTimeout(() => switchTab('signin'), 1200);
+    return false;
+  }
+ 
+  // Live-update the ID card preview as the sign-up form is filled
+  const nameInput = document.getElementById('su-name');
+  const idInput = document.getElementById('su-userid');
+  const roleSelect = document.getElementById('su-role');
+  const previewName = document.getElementById('previewName');
+  const previewTag = document.getElementById('previewTag');
+  const previewRole = document.getElementById('previewRole');
+ 
+  function updatePreview() {
+    previewName.textContent = nameInput.value.trim() || 'Your Name';
+    previewTag.textContent = 'ID · ' + (idInput.value.trim() || '—');
+    const roleText = roleSelect.options[roleSelect.selectedIndex]?.text || '';
+    previewRole.textContent = roleText ? roleText.toUpperCase() : 'ROLE PENDING';
+  }
+  [nameInput, idInput, roleSelect].forEach(el => el.addEventListener('input', updatePreview));
+  roleSelect.addEventListener('change', updatePreview);
+</script>
+ 
+</body>
+</html>
+ 

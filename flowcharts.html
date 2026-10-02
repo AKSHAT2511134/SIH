@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PashuSetu — Live Flowcharts (SIH25007)</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1B2A4A 0%, #2F4A3C 100%);
+    min-height: 100vh;
+    color: #1F2A24;
+    padding: 24px;
+  }
+  .container { max-width: 1400px; margin: 0 auto; }
+  header {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 16px;
+    padding: 28px 36px;
+    margin-bottom: 28px;
+    color: #fff;
+  }
+  header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+  header .kicker {
+    display: inline-block;
+    background: #B8863B;
+    color: #fff;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+  header p {
+    color: #C7D0E0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  nav a {
+    display: inline-block;
+    padding: 10px 18px;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid rgba(255,255,255,0.15);
+    transition: all 0.2s ease;
+  }
+  nav a:hover {
+    background: #B8863B;
+    border-color: #B8863B;
+    transform: translateY(-1px);
+  }
+  .chart-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+    border-top: 4px solid #1B2A4A;
+  }
+  .chart-card.variant-2 { border-top-color: #2F4A3C; }
+  .chart-card.variant-3 { border-top-color: #B8863B; }
+  .chart-card.variant-4 { border-top-color: #5B6560; }
+  .chart-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  .chart-num {
+    background: #1B2A4A;
+    color: #fff;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .variant-2 .chart-num { background: #2F4A3C; }
+  .variant-3 .chart-num { background: #B8863B; }
+  .variant-4 .chart-num { background: #5B6560; }
+  .chart-title h2 {
+    font-size: 20px;
+    color: #1B2A4A;
+    font-weight: 700;
+  }
+  .variant-2 .chart-title h2 { color: #2F4A3C; }
+  .chart-desc {
+    color: #5B6560;
+    font-size: 14px;
+    margin: 8px 0 20px 48px;
+    line-height: 1.6;
+  }
+  .mermaid {
+    background: #F8F9FA;
+    border-radius: 12px;
+    padding: 24px;
+    overflow-x: auto;
+    border: 1px solid #E5E7EB;
+  }
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 16px 0 0 48px;
+  }
+  .tag {
+    background: #F2F2EF;
+    color: #1B2A4A;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  .tag.accent { background: #FDE8C7; color: #8B6525; }
+  .tag.green { background: #DCE8DE; color: #2F4A3C; }
+  .tag.navy { background: #D9DEE8; color: #1B2A4A; }
+  .controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .btn {
+    padding: 6px 14px;
+    border: 1px solid #D8D8D3;
+    background: #fff;
+    border-radius: 8px;
+    font-size: 12px;
+    cursor: pointer;
+    color: #5B6560;
+    transition: all 0.15s;
+    font-weight: 500;
+  }
+  .btn:hover { background: #F2F2EF; color: #1B2A4A; }
+  .footer {
+    text-align: center;
+    color: rgba(255,255,255,0.5);
+    font-size: 12px;
+    padding: 24px;
+  }
+  section { scroll-margin-top: 20px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="kicker">SMART INDIA HACKATHON 2026 · SIH25007</div>
+    <h1>PashuSetu — Live Interactive Flowcharts</h1>
+    <p>Digital Farm Portal for Monitoring MRL &amp; Antimicrobial Usage in Livestock · All diagrams are interactive, zoomable, and exportable via Mermaid.js</p>
+  </header>
+
+  <nav>
+    <a href="#ch1">1 · Chain of Failure</a>
+    <a href="#ch2">2 · Core Solution Flow</a>
+    <a href="#ch3">3 · MRL / Withdrawal Engine</a>
+    <a href="#ch4">4 · Compliance Decision Logic</a>
+    <a href="#ch5">5 · System Architecture</a>
+    <a href="#ch6">6 · Implementation Flow</a>
+    <a href="#ch7">7 · AI/ML Risk Scoring</a>
+    <a href="#ch8">8 · Stakeholder Flow</a>
+    <a href="#ch9">9 · MVP Build Roadmap</a>
+    <a href="#ch10">10 · Security Defense Model</a>
+  </nav>
+
+  <!-- CHART 1 -->
+  <section id="ch1">
+  <div class="chart-card">
+    <div class="controls">
+      <button class="btn" onclick="zoomIn('c1')">+ Zoom</button>
+      <button class="btn" onclick="zoomOut('c1')">− Zoom</button>
+      <button class="btn" onclick="resetZoom('c1')">Reset</button>
+    </div>
+    <div class="chart-title">
+      <div class="chart-num">1</div>
+      <h2>Chain of Failure (Current System)</h2>
+    </div>
+    <p class="chart-desc">How antibiotic residues currently enter the supply chain through disconnected, untracked processes in the real world.</p>
+    <div id="c1" class="mermaid" style="transform-origin: top left; transition: transform 0.3s;">
+flowchart TD
+    A([🐄 Cow gets<br/>Mastitis]):::red --> B([👨‍⚕️ Vet prescribes<br/>Antibiotic]):::orange
+    B --> C([💊 Medicine<br/>Administered]):::orange
+    C --> D([⏰ Withdrawal Period<br/>Begins ~4 days milk]):::yellow
+    D --> E{{🚫 NO SYSTEM<br/>TRACKS THIS}}:::crit
+    E --> F([👨‍🌾 Farmer sells milk<br/>BEFORE window closes]):::red
+    F --> G([⚠️ Residues enter<br/>Supply Chain]):::red
+    G --> H([🌍 Population-scale<br/>AMR & Food-safety risk]):::crit
+
+    classDef red fill:#FEE2E2,stroke:#DC2626,color:#991B1B,stroke-width:2px
+    classDef orange fill:#FFEDD5,stroke:#EA580C,color:#9A3412,stroke-width:2px
+    classDef yellow fill:#FEF3C7,stroke:#D97706,color:#92400E,stroke-width:2px
+    classDef crit fill:#1F2937,stroke:#111827,color:#fff,stroke-width:3px
+    </div>
+    <div class="tag-row">
+      <span class="tag navy">Section 2</span>
+      <span class="tag accent">Problem Statement</span>
+      <span class="tag green">AMR / Food Safety</span>
+    </div>
+  </div>
+  </section>
+
+  <!-- CHART 2 -->
+  <section id="ch2">
+  <div class="chart-card variant-2">
+    <div class="controls">
+      <button class="btn" onclick="zoomIn('c2')">+ Zoom</button>
+      <button class="btn" onclick="zoomOut('c2')">− Zoom</button>
+      <button class="btn" onclick="resetZoom('c2')">Reset</button>
+    </div>
+    <div class="chart-title">
+      <div class="chart-num">2</div>
+      <h2>Core Solution Flow — PashuSetu</h2>
+    </div>
+    <p class="chart-desc">End-to-end digital bridge: treatment recording → withdrawal compliance → point-of-sale verification → government surveillance.</p>
+    <div id="c2" class="mermaid" style="transform-origin: top left; transition: transform 0.3s;">
+flowchart LR
+    subgraph FARMER_SIDE [👨‍🌾 Farmer Layer]
+        direction TB
+        F1([🐄 Animal Record<br/>Pashu Aadhaar ID]):::node --> F2([📱 Log Treatment<br/>or Vet Prescribes]):::node
+    end
+    subgraph VET_SIDE [👨‍⚕️ Veterinarian Layer]
+        direction TB
+        V1([💻 Digital Rx<br/>Licensed Vet ID]):::node --> V2([✅ Signed & Validated]):::node
+    end
+    subgraph ENGINE [⚙️ Compliance Engine]
+        direction TB
+        E1[🔍 Lookup Withdrawal Period<br/>from Authoritative DB]:::engine --> E2([📅 Compute Window<br/>Start + End Date]):::engine
+        E2 --> E3{{🎯 Live Eligibility<br/>Eligible / Hold / Block}}:::engine
+    end
+    subgraph PROCUREMENT [🏭 Point of Sale]
+        direction TB
+        P1([📲 QR / ID Scan<br/>Server-side Lookup]):::pos --> P2{{✅ Procurement<br/>Decision}}:::pos
+    end
+    subgraph GOVT [🏛️ Government Layer]
+        direction TB
+        G1([📊 Anonymized AMU Data]):::gov --> G2([🗺️ Dashboard +<br/>Risk-based Inspection]):::gov
+    end
+    subgraph LAB [🔬 Laboratory Layer]
+        direction TB
+        L1([🧪 Lab Result<br/>API Push]):::lab --> L2([✅ Loop Closed<br/>Chemical Truth]):::lab
+    end
+
+    F2 --> V1
+    V2 --> E1
+    E3 --> P1
+    P2 --> G1
+    L2 --> E3
+    P2 -.-> L1
+
+    classDef node fill:#DBEAFE,stroke:#1D4ED8,color:#1E3A8A,stroke-width:2px
+    classDef engine fill:#2F4A3C,stroke:#1F3A2C,color:#fff,stroke-width:3px
+    classDef pos fill:#FDE8C7,stroke:#B8863B,color:#8B6525,stroke-width:2px
+    classDef gov fill:#1B2A4A,stroke:#0F1A2E,color:#fff,stroke-width:3px
+    classDef lab fill:#E0E7FF,stroke:#4338CA,color:#3730A3,stroke-width:2px
+    </div>
+    <div class="tag-row">
+      <span class="tag green">Section 6</span>
+      <span class="tag navy">Core Flow</span>
+      <span class="tag accent">Withdrawal + QR</span>
+    </div>
+  </div>
+  </section>
+
+  <!-- CHART 3 -->
+  <section id="ch3">
+  <div class="chart-card variant-3">
+    <div class="controls">
+      <button class="btn" onclick="zoomIn('c3')">+ Zoom</button>
+      <button class="btn" onclick="zoomOut('c3')">− Zoom</button>
+      <button class="btn" onclick="resetZoom('c3')">Reset</button>
+    </div>
+    <div class="chart-title">
+      <div class="chart-num">3</div>
+      <h2>MRL &amp; Withdrawal-Period Engine</h2>
+    </div>
+    <p class="chart-desc">Chain of lookup logic — the single most important scientific fact: withdrawal periods are <b>looked up never computed</b> from MRL.</p>
+    <div id="c3" class="mermaid" style="transform-origin: top left; transition: transform 0.3s;">
+flowchart TD
+    subgraph INPUTS [📥 Treatment Inputs — Mandatory]
+        direction LR
+        I1([💊 Specific Drug<br/>Product]) --> I2([🐄 Species])
+        I2 --> I3([💉 Route])
+        I3 --> I4([⚖️ Dose])
+        I4 --> I5([📆 Duration])
+        I5 --> I6([🥛 Product<br/>Milk/Meat/Eggs])
+    end
+    subgraph LOOKUP [🔍 AUTHORITATIVE LOOKUP — NEVER FORMULA]
+        L0{{CDSCO Approved Labels +<br/>FSSAI Notified Sources}}:::lookup
+        L0 --> L1{In Reference<br/>Database?}
+    end
+    subgraph YES [✅ Withdrawal Found]
+        Y1([Get Withdrawal Period<br/>(days)]) --> Y2([Last Dose Date + WP =<br/>Withdrawal End Date])
+        Y2 --> Y3([🎯 Eligibility Flag<br/>Computed])
+    end
+    subgraph NO [⚠️ Missing / Off-label]
+        N1[Drug Not Found?] --> N2([⛔ Status =<br/>MANUAL REVIEW<br/>REQUIRED])
+        N1 -- Off-label Use --> N2
+        N1 -- Multiple Drugs? --> N3([Use LONGEST WP +<br/>FLAG for review,<br/>never average])
+    end
+
+    INPUTS --> L0
+    L1 -->|YES| Y1
+    L1 -->|NO / OFF-LABEL| N1
+    N3 --> N2
+
+    classDef lookup fill:#B8863B,stroke:#8B6525,color:#fff,stroke-width:3px
+    classDef found fill:#DCE8DE,stroke:#2F4A3C,color:#1F3A2C,stroke-width:2px
+    classDef warn fill:#FEE2E2,stroke:#DC2626,color:#991B1B,stroke-width:2px
+    </div>
+    <div class="tag-row">
+      <span class="tag accent">Section 7</span>
+      <span class="tag navy">Rule Engine</span>
+      <span class="tag green">CDSCO / FSSAI</span>
+    </div>
+  </div>
+  </section>
+
+  <!-- CHART 4 -->
+  <section id="ch4">
+  <div class="chart-card variant-4">
+    <div class="controls">
+      <button class="btn" onclick="zoomIn('c4')">+ Zoom</button>
+      <button class="btn" onclick="zoomOut('c4')">− Zoom</button>
+      <button class="btn" onclick="resetZoom('c4')">Reset</button>
+    </div>
+    <div class="chart-title">
+      <div class="chart-num">4</div>
+      <h2>Compliance Decision Logic</h2>
+    </div>
+    <p class="chart-desc">Deterministic rule engine (NOT AI) — exact conditions that produce one of five statuses for an animal / batch.</p>
+    <div id="c4" class="mermaid" style="transform-origin: top left; transition: transform 0.3s;">
+flowchart TD
+    START([🎬 Evaluate Status]) --> A{Today <=<br/>Withdrawal End?}
+    A -->|YES| B([⛔ NOT ELIGIBLE<br/>Withdrawal in Progress]):::red
+    A -->|NO| C{Lab Result<br/>on File?}
+    C -->|NO| D{Required Data<br/>Missing / Off-label?}
+    C -->|YES| E{Lab Result<br/>Above MRL?}
+    D -->|YES| F([⚠️ MANUAL REVIEW<br/>REQUIRED]):::yellow
+    D -->|NO| G([✅ ELIGIBLE<br/>Based on Recorded<br/>Withdrawal Compliance]):::green
+    E -->|POSITIVE| H([🚫 BLOCKED<br/>Non-Compliant<br/>Lab-Confirmed]):::crit
+    E -->|NEGATIVE| I([🔬 LAB-VERIFIED<br/>COMPLIANT]):::green
+
+    classDef red fill:#FEE2E2,stroke:#DC2626,color:#991B1B,stroke-width:2px
+    classDef yellow fill:#FEF3C7,stroke:#D97706,color:#92400E,stroke-width:2px
+    classDef green fill:#DCE8DE,stroke:#2F4A3C,color:#1F3A2C,stroke-width:2px
+    classDef crit fill:#7F1D1D,stroke:#450A0A,color:#fff,stroke-width:3px
+    </div>
+    <div class="tag-row">
+      <span class="tag green">Section 7</span>
+      <span class="tag navy">Deterministic</span>
+      <span class="tag accent">5 Status States</span>
+    </div>
+  </div>
+  </section>
+
+  <!-- CHART 5 -->
+  <section id="ch5">
+  <div class="chart-card">
+    <div class="controls">
+      <button class="btn" onclick="zoomIn('c5')">+ Zoom</button>
+      <button class="btn" onclick="zoomOut('c5')">− Zoom</button>
+      <button class="btn" onclick="resetZoom('c5')">Reset</button>
+    </div>
+    <div class="chart-title">
+      <div class="chart-num">5</div>
+      <h2>System Architecture — Layered View</h2>
+    </div>
+    <p class="chart-desc">Modular monolith recommendation (not microservices) — clean module boundaries for the SIH prototype scale.</p>
+    <div id="c5" class="mermaid" style="transform-origin: top left; transition: transform 0.3s;">
+flowchart TB
+    subgraph USERS [👥 User Layer]
+        direction LR
+        U1([👨‍🌾 Farmer])
+        U2([👨‍⚕️ Vet])
+        U3([🏭 Dairy /<br/>Slaughterhouse])
+        U4([🔬 Lab])
+        U5([🏛️ Government])
+    end
+    subgraph APPS [📱 Application Layer — Flutter + React]
+        direction LR
+        A1([📱 Mobile App<br/>Farmer / Vet])
+        A2([💻 Web Dashboard<br/>Procurement / Gov])
+    end
+    subgraph BACKEND [⚙️ Backend — Python FastAPI]
+        direction TB
+        subgraph MODULES [Clean Modules]
+            direction LR
+            M1(Auth + RBAC)
+            M2(Animal Mgmt)
+            M3(Treatment Rx)
+            M4(Compliance Engine)
+            M5(QR Verify)
+            M6(Procurement)
+        end
+    end
+    subgraph DATA [💾 Data Layer]
+        direction LR
+        D1([PostgreSQL<br/>Relational + JSONB])
+        D2([SQLite Hive<br/>Offline Cache])
+    end
+    subgraph ANALYTICS [📊 Analytics / ML — scikit XGBoost]
+        direction LR
+        AN1(AMU Aggregation)
+        AN2(Risk Scoring<br/>Logistic / XGB)
+        AN3(Government<br/>Dashboard)
+    end
+
+    USERS <--> APPS
+    APPS <--> MODULES
+    MODULES <--> DATA
+    MODULES --> ANALYTICS
+
+    classDef default fill:#fff,stroke:#1B2A4A,color:#1B2A4A,stroke-width:1.5px
+    </div>
+    <div class="tag-row">
+      <span class="tag navy">Section 8</span>
+      <span class="tag accent">Modular Monolith</span>
+      <span class="tag green">FastAPI · PostgreSQL</span>
+    </div>
+  </div>
+  </section>
+
+  <!-- CHART 6 -->
+  <section id="ch6">
+  <div class="chart-card variant-2">
+    <div class="controls">
+      <button class="btn" onclick="zoomIn('c6')">+ Zoom</button>
+      <button class="btn" onclick="zoomOut('c6')">− Zoom</button>
+      <button class="btn" onclick="resetZoom('c6')">Reset</button>
+    </div>
+    <div class="chart-title">
+      <div class="chart-num">6</div>
+      <h2>Implementation Flow (Step-by-Step)</h2>
+    </div>
+    <p class="chart-desc">The lifecycle of one animal treatment record as it moves through registration → prescription → procurement → analytics.</p>
+    <div id="c6" class="mermaid" style="transform-origin: top left; transition: transform 0.3s;">
+flowchart TD
+    1([① Register Animal<br/>Pashu Aadhaar ID]) --> 2([② Vet Prescription<br/>Licensed + Signed])
+    2 --> 3([③ Treatment Recorded<br/>Dose / Route / Dates])
+    3 --> 4([④ Validate Withdrawal Rule<br/>Lookup in CDSCO DB])
+    4 --> 5([⑤ Withdrawal Status<br/>Live Countdown])
+    5 --> 6([⑥ QR Generated<br/>Animal / Batch])
+    6 --> 7([⑦ Procurement Scan<br/>Server-side Auth])
+    7 --> 8{{⑧ Procurement<br/>Decision Accept / Hold / Block}}
+    8 -->|Accept| 9a([📦 Enter Supply Chain])
+    8 -->|Hold / Block| 9b([🚫 Reject or<br/>Lab Hold])
+    9a --> 10([⑨ Government Analytics<br/>AMU Dashboard])
+    9b --> 10
+    9b -.-> 11([⑩ Lab Result Loop<br/>API Close])
+    11 --> 5
+
+    classDef step fill:#DCE8DE,stroke:#2F4A3C,color:#1F3A2C,stroke-width:2px
+    classDef dec fill:#1B2A4A,stroke:#0F1A2E,color:#fff,stroke-width:3px
+    </div>
+    <div class="tag-row">
+      <span class="tag green">Section 8</span>
+      <span class="tag navy">10-Step Lifecycle</span>
+      <span class="tag accent">QR + Lab Loopback</span>
+    </div>
+  </div>
+  </section>
+
+  <!-- CHART 7 -->
+  <section id="ch7">
+  <div class="chart-card variant-3">
+    <div class="controls">
+      <button class="btn" onclick="zoomIn('c7')">+ Zoom</button>
+      <button class="btn" onclick="zoomOut('c7')">− Zoom</button>
+      <button class="btn" onclick="resetZoom('c7')">Reset</button>
+    </div>
+    <div class="chart-title">
+      <div class="chart-num">7</div>
+      <h2>AI / ML Risk Scoring Pipeline</h2>
+    </div>
+    <p class="chart-desc">Narrow, explainable ML — prioritizes limited lab testing capacity. NEVER used to auto-block a sale; always human-reviewed.</p>
+    <div id="c7" class="mermaid" style="transform-origin: top left; transition: transform 0.3s;">
+flowchart LR
+    subgraph INPUTS [📥 Input Features — Tabular]
+        direction TB
+        I1(Treatment<br/>Frequency)
+        I2(ABX Class<br/>Diversity)
+        I3(Historical<br/>Violations)
+        I4(Days-since-tx vs<br/>Typical WP)
+        I5(Farm Size +<br/>Seasonal Pattern)
+    end
+    subgraph MODEL [🧠 Model — Logistic Regression / XGBoost]
+        M1[Train on Historical<br/>Lab Results + Audits] --> M2([🎯 Risk Score<br/>0–100])
+        M2 --> M3([📣 SHAP Values<br/>Explain WHY])
+    end
+    subgraph OUTPUT [🎯 Human-in-the-Loop Output]
+        direction TB
+        O1([👀 Inspector Sees<br/>Risk 82/100])
+        O2([📝 Explanation:<br/>3 tx in 60d,<br/>1 prior violation,<br/>repeated class])
+        O1 --> O2 --> O3([⚠️ Prioritise this farm<br/>for lab testing])
+    end
+
+    INPUTS --> M1
+    M3 --> O1
+    O3 -.->|Never| BLOCK([⛔ NEVER<br/>Auto-Block Sale]):::crit
+
+    classDef input fill:#DBEAFE,stroke:#1D4ED8,color:#1E3A8A,stroke-width:2px
+    classDef model fill:#B8863B,stroke:#8B6525,color:#fff,stroke-width:3px
+    classDef output fill:#FDE8C7,stroke:#B8863B,color:#8B6525,stroke-width:2px
+    classDef crit fill:#FEE2E2,stroke:#DC2626,color:#991B1B,stroke-width:2px
+    </div>
+    <div class="tag-row">
+      <span class="tag accent">Section 10</span>
+      <span class="tag navy">Recall &gt; Precision</span>
+      <span class="tag green">SHAP Explainable</span>
+    </div>
+  </div>
+  </section>
+
+  <!-- CHART 8 -->
+  <section id="ch8">
+  <div class="chart-card variant-4">
+    <div class="controls">
+      <button class="btn" onclick="zoomIn('c8')">+ Zoom</button>
+      <button class="btn" onclick="zoomOut('c8')">− Zoom</button>
+      <button class="btn" onclick="resetZoom('c8')">Reset</button>
+    </div>
+    <div class="chart-title">
+      <div class="chart-num">8</div>
+      <h2>Stakeholder Interaction Map</h2>
+    </div>
+    <p class="chart-desc">How each stakeholder interacts with the PashuSetu system — their core inputs, outputs, and what they gain.</p>
+    <div id="c8" class="mermaid" style="transform-origin: top left; transition: transform 0.3s;">
+flowchart LR
+    subgraph CENTER [🐄 PashuSetu Platform]
+        direction TB
+        CORE([💠 Core Platform]):::core
+    end
+
+    FARMER([👨‍🌾 Farmer<br/>+Log Tx, +Status,<br/>−Accidental Violation]):::f -->|Tx Logs| CORE
+    VET([👨‍⚕️ Vet<br/>+Digital Rx,<br/>+Legal Protection]):::v -->|Prescriptions| CORE
+    DAIRY([🏭 Dairy /<br/>Slaughter<br/>−Liability, +Brand]):::d -->|QR Scans| CORE
+    LAB([🔬 Lab<br/>+Loop-Closes,<br/>+API]):::l -->|Results| CORE
+    GOV([🏛️ Gov DAHD /<br/>FSSAI<br/>+AMR Evidence]):::g -->|Dashboards| CORE
+    CONS([🛒 Consumer<br/>+Trust Trace<br/>Future Scope]):::c -.->|Future QR| CORE
+
+    CORE -->|Notifications| FARMER
+    CORE -->|Rx Management| VET
+    CORE -->|Eligibility Status| DAIRY
+    CORE -->|Order Requests| LAB
+    CORE -->|Aggregated AMU| GOV
+
+    classDef core fill:#1B2A4A,stroke:#0F1A2E,color:#fff,stroke-width:4px,shape:circle
+    classDef f fill:#DCE8DE,stroke:#2F4A3C,color:#1F3A2C,stroke-width:2px
+    classDef v fill:#DBEAFE,stroke:#1D4ED8,color:#1E3A8A,stroke-width:2px
+    classDef d fill:#FDE8C7,stroke:#B8863B,color:#8B6525,stroke-width:2px
+    classDef l fill:#E0E7FF,stroke:#4338CA,color:#3730A3,stroke-width:2px
+    classDef g fill:#FEE2E2,stroke:#DC2626,color:#991B1B,stroke-width:2px
+    classDef c fill:#F5F3FF,stroke:#7C3AED,color:#5B21B6,stroke-width:2px,stroke-dasharray: 5 5
+    </div>
+    <div class="tag-row">
+      <span class="tag green">Section 5</span>
+      <span class="tag navy">6 Stakeholders</span>
+      <span class="tag accent">Incentives Aligned</span>
+    </div>
+  </div>
+  </section>
+
+  <!-- CHART 9 -->
+  <section id="ch9">
+  <div class="chart-card">
+    <div class="controls">
+      <button class="btn" onclick="zoomIn('c9')">+ Zoom</button>
+      <button class="btn" onclick="zoomOut('c9')">− Zoom</button>
+      <button class="btn" onclick="resetZoom('c9')">Reset</button>
+    </div>
+    <div class="chart-title">
+      <div class="chart-num">9</div>
+      <h2>MVP Build Roadmap — 36 Hours · 6 Members</h2>
+    </div>
+    <p class="chart-desc">Suggested timeline breakdown for a 6-person SIH team with clear phase gates and recommended role ownership.</p>
+    <div id="c9" class="mermaid" style="transform-origin: top left; transition: transform 0.3s;">
+gantt
+    title PashuSetu — 36-Hour SIH Build Plan
+    dateFormat HH
+    axisFormat %H:%M
+    section 🔬 FOUNDATION (0–12h)
+    Finalise Data Model + Drug Reference Table    :00, 06h
+    Backend Auth + Core CRUD APIs                 :06, 06h
+    Wireframes + UI Kit                           :00, 06h
+    section 🛠️ CORE BUILD (12–24h)
+    Compliance Rule Engine                        :12, 08h
+    Farmer + Vet App Flows                        :12, 12h
+    QR Generation + Lookup API                    :20, 04h
+    section 🚀 FINISH + DEMO (24–36h)
+    Government Dashboard UI                       :24, 08h
+    ML Risk-Score Model + Demo                    :24, 08h
+    Procurement Terminal + Mock Lab API           :28, 06h
+    Synthetic Data + Integration Testing          :30, 04h
+    Rehearsal + Polish                            :34, 02h
+    </div>
+    <div class="tag-row">
+      <span class="tag navy">Section 17</span>
+      <span class="tag accent">4 Phases</span>
+      <span class="tag green">6 Roles: Backend · Frontend · ML · DB · Research · Preso</span>
+    </div>
+  </div>
+  </section>
+
+  <!-- CHART 10 -->
+  <section id="ch10">
+  <div class="chart-card variant-2">
+    <div class="controls">
+      <button class="btn" onclick="zoomIn('c10')">+ Zoom</button>
+      <button class="btn" onclick="zoomOut('c10')">− Zoom</button>
+      <button class="btn" onclick="resetZoom('c10')">Reset</button>
+    </div>
+    <div class="chart-title">
+      <div class="chart-num">10</div>
+      <h2>Security, Privacy &amp; Fraud Defense Model</h2>
+    </div>
+    <p class="chart-desc">Threat-to-defense mapping — every attack vector paired with a concrete, non-buzzword mitigation layer.</p>
+    <div id="c10" class="mermaid" style="transform-origin: top left; transition: transform 0.3s;">
+flowchart TD
+    subgraph THREATS [🎯 Attack Surface — Threats]
+        direction LR
+        T1([Fake Vet<br/>Account]):::threat
+        T2([Fake / Edited<br/>Prescription]):::threat
+        T3([Duplicate /<br/>Fraud QR]):::threat
+        T4([Ear-Tag Swap<br/>Physical Fraud]):::threat
+        T5([Insider Data<br/>Tampering]):::threat
+    end
+    subgraph DEFENSES [🛡️ Defense Layers]
+        direction LR
+        D1([License # against<br/>State Vet Council +<br/>Admin Approval MVP]):::def
+        D2([Digital Signature +<br/>Immutable Append-Only<br/>Audit Logs]):::def
+        D3([🚫 QR = pointer only<br/>TRUTH on SERVER<br/>Never in QR payload]):::def
+        D4([⚠️ Out of Scope for SW<br/>Flag Honest —<br/>Physical Inspection]):::warn
+        D5([Audit Trail + RBAC<br/>Least Privilege +<br/>Encryption Rest/Transit]):::def
+    end
+    T1 --> D1
+    T2 --> D2
+    T3 --> D3
+    T4 --> D4
+    T5 --> D5
+
+    classDef threat fill:#FEE2E2,stroke:#DC2626,color:#991B1B,stroke-width:2px
+    classDef def fill:#DCE8DE,stroke:#2F4A3C,color:#1F3A2C,stroke-width:3px
+    classDef warn fill:#FEF3C7,stroke:#D97706,color:#92400E,stroke-width:2px
+    </div>
+    <div class="tag-row">
+      <span class="tag green">Section 13</span>
+      <span class="tag navy">5 Threats → 5 Defenses</span>
+      <span class="tag accent">DPDPA 2023 · JWT · Audit Logs</span>
+    </div>
+  </div>
+  </section>
+
+  <div class="footer">
+    PashuSetu · SIH25007 · PSIT Kanpur · Flowcharts rendered with Mermaid.js · Built from the Project Dossier pdf.py
+  </div>
+
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'default',
+    securityLevel: 'loose',
+    flowchart: { curve: 'basis', useMaxWidth: true, htmlLabels: true },
+    gantt: { axisFormat: '%H:%M', barGap: 4, topPadding: 20 },
+    themeVariables: {
+      primaryColor: '#F2F2EF',
+      primaryTextColor: '#1F2A24',
+      primaryBorderColor: '#1B2A4A',
+      lineColor: '#5B6560',
+      fontFamily: 'Segoe UI, sans-serif',
+    }
+  });
+
+  const zoomStates = {};
+  function zoomIn(id) {
+    zoomStates[id] = (zoomStates[id] || 1) * 1.15;
+    document.getElementById(id).style.transform = `scale(${zoomStates[id]})`;
+  }
+  function zoomOut(id) {
+    zoomStates[id] = (zoomStates[id] || 1) / 1.15;
+    document.getElementById(id).style.transform = `scale(${zoomStates[id]})`;
+  }
+  function resetZoom(id) {
+    zoomStates[id] = 1;
+    document.getElementById(id).style.transform = 'scale(1)';
+  }
+</script>
+
+</body>
+</html>

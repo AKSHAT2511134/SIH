@@ -1,0 +1,433 @@
+from pathlib import Path
+import shutil, zipfile, textwrap, os
+
+root = Path("/mnt/data/akshat-reference-recreation")
+if root.exists():
+    shutil.rmtree(root)
+root.mkdir()
+
+portfolio_js = r'''window.PORTFOLIO = {
+  name: "Akshat Dwivedi",
+  role: "AI/ML ENGINEER IN PROGRESS",
+  secondaryRole: "Gen AI Developer · Machine Learning Enthusiast · Problem Solver",
+  bio: "I'm a 2nd-year Artificial Intelligence & Machine Learning student focused on building strong foundations in software development, data structures, machine learning and generative AI.",
+  bio2: "I'm currently strengthening Java and DSA while expanding into Machine Learning and Generative AI. My goal is to turn what I learn into practical projects and eventually work as an AI/ML engineer.",
+  email: "",                 // Add your real email here.
+  github: "",                // Add your real GitHub URL here.
+  linkedin: "",              // Add your real LinkedIn URL here.
+  resume: "/resume.pdf",     // Replace with your real resume file.
+  profileImage: "",          // Add a real image path here if desired.
+
+  skills: {
+    programming: ["Python", "Java", "C++", "C"],
+    ai: ["Machine Learning", "Deep Learning", "Generative AI", "LLMs", "AI Engineering"],
+    dsa: ["Arrays", "Strings", "Searching", "Sorting", "Recursion", "Hashing", "Trees", "Graphs", "Heaps"],
+    tools: ["Git", "GitHub", "VS Code", "Jupyter Notebook"]
+  },
+
+  projects: [
+    // Add only real projects. Example:
+    // {
+    //   title: "Project Name",
+    //   category: "AI / ML",
+    //   description: "Short truthful description.",
+    //   stack: ["Python", "OpenCV"],
+    //   github: "",
+    //   demo: "",
+    //   image: ""
+    // }
+  ],
+
+  achievements: [
+    {label: "LeetCode", value: "ADD YOUR REAL NUMBER", meta: "Problems solved"},
+    {label: "GitHub", value: "ADD YOUR REAL NUMBER", meta: "Public repositories"},
+    {label: "Certifications", value: "ADD YOUR REAL NUMBER", meta: "Verified certificates"},
+    {label: "Hackathons", value: "ADD YOUR REAL NUMBER", meta: "Participations / wins"}
+  ],
+
+  journey: [
+    {phase: "PAST", title: "School", copy: "Foundation years and the beginning of the interest in technology."},
+    {phase: "PAST", title: "College", copy: "Started the Artificial Intelligence & Machine Learning degree path."},
+    {phase: "CURRENT", title: "2nd Year AIML", copy: "Strengthening programming, problem solving and AI/ML foundations."},
+    {phase: "LEARNING", title: "Java + DSA", copy: "Building consistency through a structured Java and DSA course."},
+    {phase: "LEARNING", title: "Machine Learning", copy: "Moving from fundamentals toward practical ML systems."},
+    {phase: "LEARNING", title: "Generative AI", copy: "Exploring LLMs, AI applications and modern Gen AI workflows."},
+    {phase: "NEXT", title: "Real Projects", copy: "Turn learning into useful, demonstrable projects."},
+    {phase: "GOAL", title: "3rd Year Internship", copy: "Target: become internship-ready through fundamentals, projects and problem solving."},
+    {phase: "GOAL", title: "AI/ML Engineer", copy: "Long-term direction: Generative AI + ML + software engineering."}
+  ]
+};'''
+
+html = r'''<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Akshat Dwivedi | AI/ML Engineer</title>
+<meta name="description" content="Portfolio of Akshat Dwivedi — an AIML student exploring Machine Learning, Generative AI, software engineering and intelligent systems.">
+<meta property="og:title" content="Akshat Dwivedi | AI/ML Engineer">
+<meta property="og:description" content="A cinematic portfolio for an AIML student building toward AI/ML engineering.">
+<meta name="theme-color" content="#050608">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="portfolio.js"></script>
+</head>
+<body>
+<div class="noise"></div>
+<div class="cursor-dot"></div><div class="cursor-ring"></div>
+
+<header class="nav">
+  <a class="brand" href="#home" aria-label="Akshat home"><span>AK</span><i>•</i></a>
+  <nav class="nav-links" aria-label="Primary">
+    <a href="#about">About</a><a href="#skills">Skills</a><a href="#work">Projects</a><a href="#lab">AI Lab</a><a href="#journey">Journey</a><a href="#achievements">Achievements</a><a href="#contact">Contact</a>
+  </nav>
+  <a class="resume" href="/resume.pdf">Resume <span>↗</span></a>
+  <button class="menu" aria-label="Open menu"><span></span><span></span></button>
+</header>
+
+<div class="mobile-menu">
+  <a href="#about">About</a><a href="#skills">Skills</a><a href="#work">Projects</a><a href="#lab">AI Lab</a><a href="#journey">Journey</a><a href="#achievements">Achievements</a><a href="#contact">Contact</a>
+</div>
+
+<main>
+<section id="home" class="hero">
+  <div class="hero-copy">
+    <p class="micro">NOT A TEMPLATE <span>•</span> BUILT FOR AKSHAT</p>
+    <h1><span>AKSHAT</span><span class="outline">DWIVEDI</span></h1>
+    <p class="hero-sub">Building my way from AIML fundamentals<br>to intelligent systems.</p>
+    <div class="hero-actions">
+      <a class="pill primary" href="#work">Explore my work <span>↓</span></a>
+      <a class="pill" href="#contact">Let's connect <span>↗</span></a>
+    </div>
+    <div class="hero-meta">
+      <span>AIML / 2ND YEAR</span><span>JAVA + DSA</span><span>ML / GEN AI</span>
+    </div>
+  </div>
+
+  <div class="hero-stage" aria-hidden="true">
+    <div class="stage-grid"></div>
+    <div class="orbital o1"></div><div class="orbital o2"></div><div class="orbital o3"></div>
+    <div class="core">
+      <div class="core-inner"><span>AI</span><b></b><b></b><b></b><b></b></div>
+    </div>
+    <div class="node n1"></div><div class="node n2"></div><div class="node n3"></div><div class="node n4"></div>
+  </div>
+  <div class="scroll-note"><span></span> NATIVE SCROLL DRIVES THE EXPERIENCE</div>
+</section>
+
+<section class="reference-section intro-scene" id="about">
+  <div class="scene-text left"><span class="scene-index">01</span><p>WHERE CURIOSITY<br>MEETS <em>CODE.</em></p></div>
+  <div class="scene-card-wrap">
+    <article class="scene-card">
+      <div class="card-chrome"><span>AKSHAT / ABOUT</span><span>02 / 07</span></div>
+      <div class="card-body about-card">
+        <div class="mini-orbit"><div class="mini-core">AK</div></div>
+        <div><span class="tiny">CURRENT STATE</span><h2>Learning.<br><em>Building.</em><br>Experimenting.</h2><p>2nd-year Artificial Intelligence & Machine Learning student.</p></div>
+      </div>
+    </article>
+  </div>
+  <div class="portrait-orbit"><div class="avatar"><span>AK</span></div><small>AKSHAT</small></div>
+</section>
+
+<section class="content-section" id="about-detail">
+  <div class="section-head"><span>01 / ABOUT ME</span><h2>THE BUILD<br><em>BEGINS HERE.</em></h2></div>
+  <div class="two-col">
+    <div class="copy-block"><p id="bio1"></p><p id="bio2"></p></div>
+    <div class="truth-card"><span>POSITIONING</span><strong>AI/ML<br>ENGINEER<br><i>IN PROGRESS</i></strong><small>Not a professional claim — a direction I'm actively building toward.</small></div>
+  </div>
+</section>
+
+<section class="reference-section statement-scene">
+  <div class="scene-text center"><span class="scene-index">02</span><p>A CUSTOM SKILLSET<br>CREATES <em>THIS.</em></p></div>
+  <div class="scene-card-wrap">
+    <article class="scene-card tilted">
+      <div class="card-chrome"><span>SKILL MATRIX</span><span>03 / 07</span></div>
+      <div class="skill-preview">
+        <div class="skill-bar"><span>PYTHON</span><i style="width:72%"></i><b>LEARNING</b></div>
+        <div class="skill-bar"><span>JAVA</span><i style="width:56%"></i><b>DEVELOPING</b></div>
+        <div class="skill-bar"><span>DSA</span><i style="width:48%"></i><b>DEVELOPING</b></div>
+        <div class="skill-bar"><span>ML / GEN AI</span><i style="width:36%"></i><b>EXPLORING</b></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="content-section" id="skills">
+  <div class="section-head"><span>02 / SKILLS</span><h2>WHAT I'M<br><em>BUILDING.</em></h2></div>
+  <div class="skill-grid" id="skillGrid"></div>
+</section>
+
+<section class="reference-section work-scene" id="work">
+  <div class="scene-text right"><span class="scene-index">03</span><p>THE WORK<br>IS THE <em>PROOF.</em></p></div>
+  <div class="scene-card-wrap">
+    <article class="scene-card project-preview">
+      <div class="card-chrome"><span>PROJECT SYSTEM</span><span>04 / 07</span></div>
+      <div class="preview-content"><div class="preview-window"><div class="window-top"></div><div class="fake-lines"></div><div class="fake-lines short"></div><div class="fake-chart"></div></div><div class="preview-label"><span>REAL PROJECTS ONLY</span><b>NO FAKE METRICS</b></div></div>
+    </article>
+  </div>
+</section>
+
+<section class="content-section" id="projects-detail">
+  <div class="section-head"><span>03 / FEATURED PROJECTS</span><h2>BUILD.<br><em>DON'T PRETEND.</em></h2></div>
+  <div class="empty-projects" id="projectGrid">
+    <div class="empty-project"><span>PROJECT DATABASE</span><strong>ADD YOUR REAL PROJECTS</strong><p>The UI is ready. Add only projects you have actually built inside <code>portfolio.js</code>.</p></div>
+  </div>
+</section>
+
+<section class="reference-section lab-scene" id="lab">
+  <div class="scene-text left"><span class="scene-index">04</span><p>GENERATED AT<br><em>RUNTIME.</em></p></div>
+  <div class="scene-card-wrap">
+    <article class="scene-card">
+      <div class="card-chrome"><span>AI LAB / QUERY</span><span>05 / 07</span></div>
+      <div class="chat-preview"><div class="bubble user">What is Akshat learning?</div><div class="bubble bot">Java + DSA, Machine Learning and Generative AI — with projects as the destination.</div><div class="chat-cursor"></div></div>
+    </article>
+  </div>
+</section>
+
+<section class="content-section ai-lab-section">
+  <div class="section-head"><span>04 / AI LAB</span><h2>ASK MY<br><em>PORTFOLIO.</em></h2></div>
+  <div class="lab">
+    <div class="lab-window">
+      <div class="lab-top"><span>AKSHAT.AI</span><span>FRONTEND DEMO · NO API KEY</span></div>
+      <div class="messages" id="messages"><div class="msg bot">Ask me about Akshat's learning path, skills, projects or career goal.</div></div>
+      <div class="suggestions" id="suggestions"></div>
+      <form id="labForm"><input id="labInput" autocomplete="off" placeholder="Ask something about Akshat…"><button>↗</button></form>
+    </div>
+    <div class="lab-note"><span>ARCHITECTURE</span><strong>Portfolio data → retrieval layer → LLM/API later</strong><p>This demo is intentionally frontend-only. Connect your own backend/LLM later; never expose provider API keys in browser code.</p></div>
+  </div>
+</section>
+
+<section class="reference-section journey-scene" id="journey">
+  <div class="scene-text center"><span class="scene-index">05</span><p>NATIVE SCROLL<br><em>DRIVES IT.</em></p></div>
+  <div class="scene-card-wrap">
+    <article class="scene-card">
+      <div class="card-chrome"><span>JOURNEY / TIMELINE</span><span>06 / 07</span></div>
+      <div class="timeline-preview"><span class="active"></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="timeline-label"><b>2ND YEAR AIML</b><small>CURRENT</small></div>
+    </article>
+  </div>
+</section>
+
+<section class="content-section" id="journey-detail">
+  <div class="section-head"><span>05 / JOURNEY</span><h2>FROM NOW<br>TO <em>THE GOAL.</em></h2></div>
+  <div class="journey" id="journeyList"></div>
+</section>
+
+<section class="content-section" id="achievements">
+  <div class="section-head"><span>06 / ACHIEVEMENTS</span><h2>NUMBERS<br>ONLY WHEN <em>REAL.</em></h2></div>
+  <div class="achievement-grid" id="achievementGrid"></div>
+</section>
+
+<section class="reference-section final-scene">
+  <div class="scene-text center"><span class="scene-index">06</span><p>WANT THE<br><em>BUILD?</em></p></div>
+  <div class="scene-card-wrap">
+    <article class="scene-card final-card">
+      <div class="card-chrome"><span>CONTACT / AKSHAT</span><span>07 / 07</span></div>
+      <div class="final-preview"><span>BUILDING TOWARD</span><strong>AI/ML<br>ENGINEERING</strong><a href="#contact">CONNECT ↗</a></div>
+    </article>
+  </div>
+  <div class="portrait-orbit final-avatar"><div class="avatar"><span>AK</span></div><small>LET'S BUILD</small></div>
+</section>
+
+<section class="content-section contact-section" id="contact">
+  <div class="contact-inner">
+    <span class="eyebrow">07 / CONTACT</span>
+    <h2>LET'S BUILD<br><em>SOMETHING.</em></h2>
+    <p>I'm currently learning, building and looking for opportunities to grow through real-world projects and internships.</p>
+    <div class="contact-actions">
+      <a class="contact-btn disabled" id="emailBtn">Email me <span>↗</span></a>
+      <a class="contact-btn disabled" id="githubBtn">GitHub <span>↗</span></a>
+      <a class="contact-btn disabled" id="linkedinBtn">LinkedIn <span>↗</span></a>
+    </div>
+    <small class="config-note">Add your real contact links in <code>portfolio.js</code> to activate these buttons.</small>
+  </div>
+</section>
+</main>
+
+<footer><span>© 2026 AKSHAT DWIVEDI</span><span>AI/ML · JAVA · DSA · GEN AI</span></footer>
+<script src="app.js"></script>
+</body>
+</html>'''
+
+css = r''':root{
+--bg:#050608;--panel:#0a0b0f;--panel2:#0e1015;--text:#f4f1ed;--muted:#85858d;--line:rgba(255,255,255,.10);
+--red:#ff3c2e;--purple:#7a55ff;--cyan:#67d7ff;--radius:22px;
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Manrope,Arial,sans-serif;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;z-index:-3;background:radial-gradient(circle at 50% 22%,rgba(93,58,160,.16),transparent 32%),radial-gradient(circle at 70% 65%,rgba(255,50,35,.08),transparent 28%),#050608}
+body:after{content:"";position:fixed;inset:0;z-index:20;pointer-events:none;opacity:.045;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+a{color:inherit}.noise{position:fixed;inset:0;pointer-events:none;z-index:19;background:radial-gradient(circle at center,transparent 30%,rgba(0,0,0,.32))}
+.nav{position:fixed;z-index:30;top:18px;left:50%;transform:translateX(-50%);width:min(1160px,calc(100% - 40px));height:58px;padding:0 16px 0 20px;border:1px solid rgba(255,255,255,.09);background:rgba(7,8,11,.56);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border-radius:999px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 20px 70px rgba(0,0,0,.22)}
+.brand{text-decoration:none;font-weight:800;letter-spacing:-1px}.brand i{font-style:normal;color:var(--red);margin-left:3px}.nav-links{display:flex;gap:20px}.nav-links a,.resume{font:10px "DM Mono",monospace;text-transform:uppercase;letter-spacing:1.2px;text-decoration:none;color:#a9a9b0;transition:.25s}.nav-links a:hover,.resume:hover{color:#fff}.resume{border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:10px 13px;color:#fff}.resume span{color:var(--red);margin-left:7px}.menu{display:none;background:none;border:0}.mobile-menu{display:none}
+.hero{min-height:100svh;position:relative;padding:150px 7vw 80px;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+.hero-copy{position:relative;z-index:5}.micro,.eyebrow{font:9px "DM Mono",monospace;letter-spacing:2.1px;color:#9b9ba3;text-transform:uppercase}.micro span{color:var(--red);margin:0 7px}.hero h1{font-size:clamp(72px,13vw,190px);line-height:.76;letter-spacing:-.105em;margin:25px 0 24px;font-weight:800}.hero h1 span{display:block}.outline{color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.55)}em{font-style:normal;color:var(--red)}.hero-sub{font-size:clamp(16px,1.5vw,21px);line-height:1.5;color:#c5c4c8}.hero-actions{display:flex;gap:10px;justify-content:center;margin-top:28px}.pill{border:1px solid var(--line);border-radius:999px;padding:12px 16px;text-decoration:none;font:10px "DM Mono";letter-spacing:1px;background:rgba(255,255,255,.025);transition:.3s}.pill.primary{background:#fff;color:#080808}.pill:hover{transform:translateY(-3px);box-shadow:0 15px 45px rgba(255,255,255,.09)}.pill span{margin-left:12px}.hero-meta{display:flex;justify-content:center;gap:20px;margin-top:45px;color:#686870;font:9px "DM Mono";letter-spacing:1.3px}
+.hero-stage{position:absolute;inset:18% 15% 8%;pointer-events:none;opacity:.9}.stage-grid{position:absolute;inset:5%;background:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:50px 50px;mask-image:radial-gradient(circle,black,transparent 70%);transform:perspective(500px) rotateX(62deg) translateY(24%)}.core{position:absolute;left:50%;top:50%;width:180px;height:180px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle at 35% 30%,#b8b1ff 0 2%,#6f51ff 8%,#291d63 35%,rgba(15,11,28,.2) 66%,transparent 70%);box-shadow:0 0 45px rgba(121,85,255,.42),0 0 150px rgba(80,45,180,.18);animation:corePulse 4s ease-in-out infinite}.core:before,.core:after{content:"";position:absolute;inset:-32px;border:1px solid rgba(145,116,255,.35);border-radius:50%;transform:rotateX(68deg) rotateZ(15deg);animation:spin 10s linear infinite}.core:after{inset:-55px;border-color:rgba(103,215,255,.18);transform:rotateY(67deg) rotateZ(-18deg);animation-direction:reverse}.core-inner{position:absolute;inset:0;display:grid;place-items:center}.core-inner span{font-weight:800;font-size:42px;letter-spacing:-4px}.node{position:absolute;width:7px;height:7px;background:#fff;border-radius:50%;box-shadow:0 0 20px 6px rgba(110,88,255,.6)}.n1{left:27%;top:33%}.n2{right:23%;top:40%}.n3{left:32%;bottom:26%}.n4{right:30%;bottom:22%}.orbital{position:absolute;left:50%;top:50%;border:1px solid rgba(255,255,255,.09);border-radius:50%;transform:translate(-50%,-50%) rotateX(70deg);animation:spin 16s linear infinite}.o1{width:480px;height:220px}.o2{width:700px;height:300px;animation-duration:24s;transform:translate(-50%,-50%) rotateX(72deg) rotateZ(28deg)}.o3{width:950px;height:360px;animation-duration:30s;transform:translate(-50%,-50%) rotateX(67deg) rotateZ(-28deg)}
+.scroll-note{position:absolute;bottom:25px;left:50%;transform:translateX(-50%);font:9px "DM Mono";letter-spacing:1.7px;color:#666;white-space:nowrap}.scroll-note span{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--red);box-shadow:0 0 15px var(--red);margin-right:8px}
+.reference-section{min-height:120svh;position:relative;display:grid;place-items:center;padding:100px 6vw;overflow:hidden}.reference-section:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(89,52,154,.12),transparent 32%)}.scene-text{position:absolute;z-index:4;text-align:center;pointer-events:none}.scene-text.left{left:8%;top:24%;text-align:left}.scene-text.right{right:8%;top:26%;text-align:right}.scene-text.center{top:15%}.scene-index{font:9px "DM Mono";color:#555;display:block;margin-bottom:12px}.scene-text p{font-size:clamp(20px,3vw,40px);line-height:.95;letter-spacing:-1.5px;font-weight:700;margin:0}.scene-text p em{color:var(--red)}
+.scene-card-wrap{width:min(760px,75vw);perspective:1200px;position:relative;z-index:3;transform:translateY(4%)}.scene-card{aspect-ratio:1.58;border:1px solid rgba(255,255,255,.14);background:linear-gradient(135deg,rgba(17,18,23,.94),rgba(5,6,8,.96));border-radius:3px;box-shadow:0 40px 130px rgba(0,0,0,.7),0 0 80px rgba(98,53,160,.08);overflow:hidden;transform:rotateX(7deg) rotateY(-4deg);transition:transform .5s cubic-bezier(.2,.7,.2,1);position:relative}.scene-card:before{content:"";position:absolute;width:50%;height:70%;right:-15%;top:-20%;background:radial-gradient(circle,rgba(255,55,40,.25),transparent 67%);filter:blur(20px)}.scene-card.tilted{transform:rotateX(5deg) rotateY(6deg)}.card-chrome{height:40px;border-bottom:1px solid rgba(255,255,255,.09);display:flex;align-items:center;justify-content:space-between;padding:0 16px;color:#5f6068;font:8px "DM Mono";letter-spacing:1px}.card-body{height:calc(100% - 40px);display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center;padding:40px}.tiny{font:8px "DM Mono";color:#686870;letter-spacing:1px}.about-card h2{font-size:clamp(32px,4.5vw,62px);line-height:.86;letter-spacing:-3px;margin:12px 0}.about-card p{color:#74747b;font-size:12px;line-height:1.7}.mini-orbit{width:230px;height:230px;border:1px solid rgba(255,255,255,.12);border-radius:50%;display:grid;place-items:center;position:relative}.mini-orbit:before,.mini-orbit:after{content:"";position:absolute;border:1px solid rgba(120,80,255,.35);border-radius:50%;inset:-25px;transform:rotateX(65deg)}.mini-orbit:after{inset:-45px;transform:rotateY(65deg)}.mini-core{width:105px;height:105px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,#7c62ff,#17112d 65%);box-shadow:0 0 50px rgba(117,85,255,.3);font-weight:800}
+.portrait-orbit{position:absolute;bottom:8%;left:50%;transform:translateX(-50%);text-align:center;z-index:5}.avatar{width:104px;height:104px;border-radius:50%;border:1px solid rgba(255,255,255,.16);display:grid;place-items:center;background:radial-gradient(circle at 50% 30%,#3b3c45,#15161b 65%);box-shadow:0 0 0 8px rgba(255,255,255,.025),0 0 45px rgba(255,52,42,.12)}.avatar span{font-size:30px;font-weight:800;letter-spacing:-3px}.portrait-orbit small{display:block;margin-top:10px;color:#5e5e66;font:8px "DM Mono";letter-spacing:2px}
+.content-section{padding:150px 8vw;max-width:1500px;margin:auto;position:relative}.section-head{display:flex;justify-content:space-between;gap:40px;align-items:flex-end;border-top:1px solid var(--line);padding-top:20px}.section-head>span{font:9px "DM Mono";color:#777;letter-spacing:1.5px}.section-head h2{font-size:clamp(54px,8vw,120px);line-height:.8;letter-spacing:-.09em;text-align:right;margin:0}.two-col{display:grid;grid-template-columns:1.2fr .8fr;gap:90px;margin-top:100px}.copy-block{max-width:670px}.copy-block p{color:#999;line-height:1.9;font-size:16px;margin:0 0 25px}.truth-card{padding:35px;border:1px solid var(--line);background:linear-gradient(145deg,rgba(255,255,255,.035),rgba(255,255,255,.01));border-radius:var(--radius);display:flex;flex-direction:column;justify-content:space-between;min-height:300px}.truth-card span,.truth-card small{font:9px "DM Mono";color:#666;letter-spacing:1.2px}.truth-card strong{font-size:42px;line-height:.84;letter-spacing:-3px}.truth-card i{color:var(--red);font-style:normal}.truth-card small{line-height:1.6}
+.skill-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:75px}.skill-group{min-height:260px;padding:24px;border:1px solid var(--line);background:rgba(255,255,255,.018);border-radius:18px;transition:.35s}.skill-group:hover{transform:translateY(-8px);border-color:rgba(122,85,255,.4);box-shadow:0 30px 80px rgba(74,46,145,.12)}.skill-group span{font:9px "DM Mono";color:#686870}.skill-group h3{font-size:25px;letter-spacing:-1px;margin:30px 0 20px}.skill-list{display:flex;flex-wrap:wrap;gap:7px}.skill{font:9px "DM Mono";padding:8px 9px;border:1px solid #25262b;border-radius:999px;color:#a4a4aa}
+.empty-projects{margin-top:70px}.empty-project{min-height:300px;border:1px dashed #2b2c31;border-radius:22px;display:grid;place-items:center;text-align:center;padding:40px;background:radial-gradient(circle at 50% 20%,rgba(117,85,255,.08),transparent 55%)}.empty-project span,.empty-project p{font:9px "DM Mono";color:#666}.empty-project strong{font-size:42px;letter-spacing:-2px}.empty-project code{color:#aaa}
+.project-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:70px}.project-card{border:1px solid var(--line);border-radius:22px;min-height:370px;padding:25px;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.01));position:relative;overflow:hidden;transition:.35s}.project-card:hover{transform:translateY(-8px) rotateX(2deg);box-shadow:0 35px 100px rgba(0,0,0,.4)}.project-card h3{font-size:44px;letter-spacing:-2px;line-height:.9;margin:50px 0 15px}.project-card p{color:#85858d;line-height:1.7}.project-card .project-links{position:absolute;bottom:24px;display:flex;gap:8px}.project-card .project-links a{font:9px "DM Mono";border:1px solid #292a2f;border-radius:999px;padding:9px;text-decoration:none}
+.skill-preview{padding:45px}.skill-bar{display:grid;grid-template-columns:90px 1fr 80px;gap:15px;align-items:center;margin:25px 0;font:8px "DM Mono";color:#6e6e77}.skill-bar i{height:2px;background:linear-gradient(90deg,var(--red),var(--purple));display:block;box-shadow:0 0 12px rgba(255,55,40,.35)}.skill-bar b{font-weight:400;color:#4d4d54}.preview-content{height:calc(100% - 40px);padding:38px}.preview-window{height:75%;border:1px solid #222;background:#08090c;padding:18px;position:relative;overflow:hidden}.window-top{width:45%;height:7px;background:#2b2c33;border-radius:5px}.fake-lines{width:75%;height:3px;background:#26272c;margin-top:40px}.fake-lines.short{width:45%;margin-top:12px}.fake-chart{position:absolute;left:18px;right:18px;bottom:20px;height:40%;border-bottom:1px solid #292a2e;background:linear-gradient(150deg,transparent 40%,rgba(122,85,255,.2) 40%,transparent 42%)}.preview-label{display:flex;justify-content:space-between;margin-top:18px;font:8px "DM Mono";color:#555}.preview-label b{color:var(--red);font-weight:400}.chat-preview{height:calc(100% - 40px);padding:35px;display:flex;flex-direction:column;justify-content:center;gap:15px}.bubble{max-width:75%;padding:12px 14px;border-radius:13px;font-size:11px;line-height:1.5}.bubble.user{align-self:flex-end;background:#1b1922;color:#c9c4d9}.bubble.bot{background:#101116;border:1px solid #23242a;color:#aaa}.chat-cursor{width:7px;height:14px;background:var(--red);margin-left:2px;animation:blink 1s infinite}
+.lab{display:grid;grid-template-columns:1.4fr .6fr;gap:20px;margin-top:75px}.lab-window,.lab-note{border:1px solid var(--line);border-radius:22px;background:#090a0e;overflow:hidden}.lab-top{height:46px;padding:0 17px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font:8px "DM Mono";color:#666}.messages{min-height:330px;padding:22px;display:flex;flex-direction:column;gap:12px}.msg{max-width:80%;padding:12px 14px;border-radius:14px;font-size:12px;line-height:1.6}.msg.bot{border:1px solid #202127;background:#0d0e13;color:#aaa}.msg.user{background:#1b1730;color:#d8d1ff;align-self:flex-end}.suggestions{display:flex;gap:7px;flex-wrap:wrap;padding:0 20px 15px}.suggestion{border:1px solid #24252b;background:#0c0d11;color:#888;padding:8px 10px;border-radius:999px;font:8px "DM Mono";cursor:pointer}.lab form{display:flex;border-top:1px solid var(--line)}.lab input{flex:1;background:transparent;border:0;outline:0;padding:17px 20px;color:#fff;font:11px "DM Mono"}.lab button{width:55px;border:0;background:var(--red);color:#fff;font-size:18px}.lab-note{padding:25px;align-self:start}.lab-note span{font:8px "DM Mono";color:#666}.lab-note strong{display:block;font-size:24px;line-height:1;margin:28px 0}.lab-note p{color:#777;font-size:11px;line-height:1.7}
+.timeline-preview{height:55%;display:flex;align-items:center;justify-content:center;gap:0;padding:50px}.timeline-preview span{width:14%;height:1px;background:#2a2b31;position:relative}.timeline-preview span:before{content:"";position:absolute;width:8px;height:8px;border-radius:50%;background:#2b2c31;top:-4px;left:0}.timeline-preview span.active{background:linear-gradient(90deg,var(--red),#2b2c31)}.timeline-preview span.active:before{background:var(--red);box-shadow:0 0 18px var(--red)}.timeline-label{padding:0 45px}.timeline-label b{display:block;font-size:35px;letter-spacing:-2px}.timeline-label small{font:8px "DM Mono";color:var(--red)}
+.journey{margin-top:80px;border-left:1px solid #25262b;padding-left:40px}.journey-item{position:relative;padding:0 0 55px}.journey-item:before{content:"";position:absolute;left:-45px;top:3px;width:9px;height:9px;border-radius:50%;background:#28292f;border:3px solid var(--bg)}.journey-item.current:before{background:var(--red);box-shadow:0 0 20px var(--red)}.journey-item .phase{font:8px "DM Mono";color:#666;letter-spacing:1.5px}.journey-item h3{font-size:42px;letter-spacing:-2px;margin:8px 0}.journey-item p{max-width:620px;color:#777;line-height:1.7}.achievement-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:75px}.achievement{padding:25px;border:1px solid var(--line);border-radius:18px;min-height:190px;background:rgba(255,255,255,.015)}.achievement span{font:8px "DM Mono";color:#666}.achievement strong{display:block;font-size:27px;line-height:.95;letter-spacing:-1.3px;margin:40px 0 12px}.achievement small{color:#666;font:9px "DM Mono"}
+.final-preview{height:calc(100% - 40px);display:flex;flex-direction:column;justify-content:center;padding:45px}.final-preview span{font:8px "DM Mono";color:#666}.final-preview strong{font-size:clamp(38px,6vw,70px);line-height:.82;letter-spacing:-4px;margin:18px 0 25px}.final-preview a{align-self:flex-start;text-decoration:none;font:9px "DM Mono";color:#fff;border:1px solid #2b2c31;border-radius:999px;padding:10px 14px}.final-avatar{bottom:7%}
+.contact-section{min-height:90svh;display:flex;align-items:center}.contact-inner{width:100%;border-top:1px solid var(--line);padding-top:20px}.contact-inner h2{font-size:clamp(65px,11vw,160px);line-height:.78;letter-spacing:-.1em;margin:45px 0}.contact-inner>p{max-width:500px;color:#888;line-height:1.8}.contact-actions{display:flex;gap:9px;margin-top:30px}.contact-btn{border:1px solid #2a2b31;padding:12px 15px;border-radius:999px;text-decoration:none;font:9px "DM Mono";color:#aaa;transition:.25s}.contact-btn:hover{color:#fff;border-color:#555;transform:translateY(-2px)}.contact-btn span{color:var(--red);margin-left:12px}.contact-btn.disabled{opacity:.45;cursor:not-allowed}.config-note{display:block;color:#555;font:8px "DM Mono";margin-top:18px}.config-note code{color:#777}
+footer{padding:25px 7vw;border-top:1px solid var(--line);display:flex;justify-content:space-between;color:#555;font:8px "DM Mono";letter-spacing:1px}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s ease}.reveal.in{opacity:1;transform:none}
+@keyframes spin{to{transform:rotateX(65deg) rotateZ(375deg)}}@keyframes corePulse{50%{transform:translate(-50%,-50%) scale(1.08);filter:brightness(1.18)}}@keyframes blink{50%{opacity:0}}
+@media(max-width:950px){.nav-links{display:none}.menu{display:flex;flex-direction:column;gap:5px}.menu span{display:block;width:20px;height:1px;background:#fff}.mobile-menu{position:fixed;z-index:29;top:18px;right:20px;width:230px;padding:80px 25px 25px;background:rgba(8,9,12,.95);border:1px solid var(--line);border-radius:24px;transform:translateY(-20px) scale(.95);opacity:0;pointer-events:none;transition:.3s;display:flex;flex-direction:column;gap:20px}.mobile-menu.open{opacity:1;transform:none;pointer-events:auto}.mobile-menu a{text-decoration:none;font:10px "DM Mono";text-transform:uppercase;color:#aaa}.skill-grid,.achievement-grid{grid-template-columns:repeat(2,1fr)}.two-col,.lab{grid-template-columns:1fr}.scene-text.left,.scene-text.right{left:50%;right:auto;top:13%;transform:translateX(-50%);text-align:center}.scene-card-wrap{width:88vw}.reference-section{min-height:100svh}.portrait-orbit{bottom:5%}}
+@media(max-width:600px){.nav{width:calc(100% - 20px);top:10px}.resume{display:none}.hero{padding:125px 20px 65px}.hero h1{font-size:23vw}.hero-stage{inset:32% 0 12%;opacity:.72}.core{width:120px;height:120px}.o1{width:310px;height:140px}.o2{width:450px;height:190px}.o3{width:580px;height:220px}.hero-meta{flex-wrap:wrap;gap:10px;margin-top:30px}.content-section{padding:100px 20px}.section-head{display:block}.section-head h2{text-align:left;margin-top:35px}.skill-grid,.achievement-grid,.project-grid{grid-template-columns:1fr}.two-col{margin-top:60px}.truth-card{min-height:240px}.scene-card{aspect-ratio:1.18}.card-body{grid-template-columns:1fr;padding:25px}.mini-orbit{width:140px;height:140px;margin:auto}.mini-core{width:70px;height:70px}.about-card h2{font-size:34px}.scene-text p{font-size:24px}.portrait-orbit{bottom:3%}.avatar{width:80px;height:80px}.chat-preview,.skill-preview,.preview-content,.final-preview{padding:22px}.timeline-label{padding:0 22px}.timeline-label b{font-size:25px}.journey{padding-left:28px}.journey-item:before{left:-33px}.contact-actions{flex-wrap:wrap}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+'''
+
+app = r'''(function(){
+const P=window.PORTFOLIO||{};
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+
+$("#bio1").textContent=P.bio||"";
+$("#bio2").textContent=P.bio2||"";
+
+const skillMeta=[
+  ["Programming",P.skills?.programming||[],"Core languages"],
+  ["AI / ML",P.skills?.ai||[],"Exploring & building"],
+  ["DSA",P.skills?.dsa||[],"Problem solving"],
+  ["Tools",P.skills?.tools||[],"Development stack"]
+];
+$("#skillGrid").innerHTML=skillMeta.map(([name,list,sub])=>`<article class="skill-group"><span>${sub}</span><h3>${name}</h3><div class="skill-list">${list.map(x=>`<span class="skill">${x}</span>`).join("")}</div></article>`).join("");
+
+const projects=P.projects||[];
+if(projects.length){
+ $("#projectGrid").className="project-grid";
+ $("#projectGrid").innerHTML=projects.map(p=>`<article class="project-card"><span class="eyebrow">${p.category||"PROJECT"}</span><h3>${p.title}</h3><p>${p.description||""}</p><div class="skill-list">${(p.stack||[]).map(x=>`<span class="skill">${x}</span>`).join("")}</div><div class="project-links">${p.github?`<a href="${p.github}" target="_blank" rel="noreferrer">GITHUB ↗</a>`:""}${p.demo?`<a href="${p.demo}" target="_blank" rel="noreferrer">LIVE ↗</a>`:""}</div></article>`).join("");
+}
+
+$("#journeyList").innerHTML=(P.journey||[]).map((j,i)=>`<article class="journey-item ${j.phase==="CURRENT"?"current":""}"><span class="phase">${j.phase}</span><h3>${j.title}</h3><p>${j.copy}</p></article>`).join("");
+$("#achievementGrid").innerHTML=(P.achievements||[]).map(a=>`<article class="achievement"><span>${a.label}</span><strong>${a.value}</strong><small>${a.meta}</small></article>`).join("");
+
+function activateLink(id,url,kind){
+ const el=$(id); if(!el||!url)return;
+ el.href=kind==="email"?"mailto:"+url:url;el.target=kind==="email"?"":"_blank";el.rel="noreferrer";el.classList.remove("disabled");
+}
+activateLink("#emailBtn",P.email,"email");activateLink("#githubBtn",P.github);activateLink("#linkedinBtn",P.linkedin);
+
+const suggestions=[
+"What is Akshat learning?","What is his career goal?","What technologies does he use?","What is his DSA roadmap?","Why is he learning Gen AI?"
+];
+$("#suggestions").innerHTML=suggestions.map(s=>`<button class="suggestion">${s}</button>`).join("");
+
+function answer(q){
+ const s=q.toLowerCase();
+ if(s.includes("learning")||s.includes("study"))return "Akshat is currently strengthening Java and DSA while expanding into Machine Learning, Generative AI, LLMs and AI engineering.";
+ if(s.includes("goal")||s.includes("career"))return "The direction is AI/ML engineering, with a focus on Generative AI + Machine Learning + Software Engineering + Problem Solving.";
+ if(s.includes("technolog")||s.includes("skill"))return "Current areas include Python, Java, C++, C, DSA, Machine Learning, Deep Learning, Generative AI, LLMs, Git, GitHub and Jupyter Notebook.";
+ if(s.includes("dsa"))return "The current DSA path covers arrays, strings, searching, sorting, recursion, hashing, trees, graphs and heaps, with Java as the main learning language.";
+ if(s.includes("gen")||s.includes("llm"))return "Generative AI is part of the learning path: understanding LLMs, AI applications and the engineering practices needed to turn models into useful systems.";
+ if(s.includes("project"))return projects.length?`There are ${projects.length} real project entries in the portfolio data.`:"Projects are intentionally not fabricated. Add real projects to portfolio.js and this interface will surface them.";
+ return "I can answer about Akshat's current learning, skills, DSA path, projects and AI/ML career goal.";
+}
+function send(q){
+ if(!q.trim())return;
+ const box=$("#messages"),u=document.createElement("div");u.className="msg user";u.textContent=q;box.appendChild(u);
+ setTimeout(()=>{const b=document.createElement("div");b.className="msg bot";b.textContent=answer(q);box.appendChild(b);box.scrollTop=box.scrollHeight},250);
+}
+$("#labForm").addEventListener("submit",e=>{e.preventDefault();const i=$("#labInput");send(i.value);i.value=""});
+$$(".suggestion").forEach(b=>b.addEventListener("click",()=>send(b.textContent)));
+
+const nav=$(".nav"),menu=$(".menu"),mm=$(".mobile-menu");
+menu.addEventListener("click",()=>mm.classList.toggle("open"));
+$$(".mobile-menu a").forEach(a=>a.addEventListener("click",()=>mm.classList.remove("open")));
+
+const revealObserver=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add("in")}),{threshold:.12});
+$$(".content-section,.scene-card,.scene-text,.section-head,.skill-group,.achievement,.journey-item").forEach(el=>{el.classList.add("reveal");revealObserver.observe(el)});
+
+const cursorDot=$(".cursor-dot"),cursorRing=$(".cursor-ring");let cx=0,cy=0,rx=0,ry=0;
+addEventListener("pointermove",e=>{cx=e.clientX;cy=e.clientY;cursorDot.style.transform=`translate(${cx}px,${cy}px)`});
+function cursorLoop(){rx+=(cx-rx)*.18;ry+=(cy-ry)*.18;cursorRing.style.transform=`translate(${rx}px,${ry}px)`;requestAnimationFrame(cursorLoop)}cursorLoop();
+
+const cards=$$(".scene-card");
+addEventListener("pointermove",e=>{
+ if(matchMedia("(pointer:fine)").matches){
+   const x=e.clientX/innerWidth-.5,y=e.clientY/innerHeight-.5;
+   cards.forEach((c,i)=>{c.style.transform=`perspective(1200px) rotateX(${7-y*5}deg) rotateY(${-4+x*7}deg) translateZ(${i===0?0:4}px)`});
+ }
+});
+const scenes=$$(".reference-section");
+function sceneMotion(){
+ const vh=innerHeight;
+ scenes.forEach((s,i)=>{
+   const r=s.getBoundingClientRect(),p=Math.max(0,Math.min(1,(vh-r.top)/(vh+r.height)));
+   const card=s.querySelector(".scene-card-wrap"),text=s.querySelector(".scene-text"),avatar=s.querySelector(".portrait-orbit");
+   if(card){card.style.transform=`translateY(${(1-p)*90-30}px) scale(${.88+p*.12})`;card.style.opacity=Math.min(1,Math.max(.18,p*2))}
+   if(text){text.style.transform=`translateX(${text.classList.contains("left")?"":"-50%"}) translateY(${(1-p)*35}px)`;text.style.opacity=Math.min(1,Math.max(.2,p*1.8))}
+   if(avatar){avatar.style.transform=`translateX(-50%) translateY(${(1-p)*40}px)`;avatar.style.opacity=Math.min(1,Math.max(.2,p*1.8))}
+ });
+}
+addEventListener("scroll",sceneMotion,{passive:true});sceneMotion();
+
+let last=0;
+addEventListener("scroll",()=>{
+ const y=scrollY;
+ nav.style.transform=`translateX(-50%) translateY(${Math.min(0,(y-last)*.15)}px)`;
+ last=y;
+},{passive:true});
+
+$$("a[href^='#']").forEach(a=>a.addEventListener("click",e=>{const id=a.getAttribute("href");if(id.length>1){e.preventDefault();document.querySelector(id)?.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"})}}));
+})();'''
+
+# Cursor CSS separately appended because main CSS keeps it simple.
+css += r'''
+.cursor-dot{position:fixed;z-index:100;width:5px;height:5px;background:var(--red);border-radius:50%;top:-2px;left:-2px;pointer-events:none;mix-blend-mode:screen}.cursor-ring{position:fixed;z-index:99;width:28px;height:28px;border:1px solid rgba(255,255,255,.25);border-radius:50%;top:-14px;left:-14px;pointer-events:none;transition:width .2s,height .2s,border-color .2s;mix-blend-mode:screen}
+@media(pointer:coarse){.cursor-dot,.cursor-ring{display:none}}
+'''
+
+(root/"index.html").write_text(html,encoding="utf-8")
+(root/"styles.css").write_text(css,encoding="utf-8")
+(root/"app.js").write_text(app,encoding="utf-8")
+(root/"portfolio.js").write_text(portfolio_js,encoding="utf-8")
+(root/"README.md").write_text("""# Akshat Dwivedi — Reference Recreation
+
+This is a self-contained, premium portfolio recreation inspired by the uploaded reference video.
+
+## Run
+Double-click `index.html` or use VS Code Live Server. The animation itself has no JavaScript CDN dependency.
+
+## Customize
+Edit `portfolio.js` only for:
+- name / role
+- bio
+- skills
+- projects
+- achievements
+- journey
+- email / GitHub / LinkedIn
+- profile image path
+
+Add your real `resume.pdf` beside `index.html` (or change the resume path).
+
+## Reference-inspired experience
+- Centered cinematic "website card" scenes
+- Scroll-driven scene choreography
+- Dark red / violet technical aesthetic
+- Floating orbital AI visual
+- Glass / hairline borders
+- Custom cursor
+- 3D card tilt
+- Native-scroll motion
+- AI Lab frontend demo
+- Truthful data architecture with no fabricated metrics
+
+No real projects, achievements, contact links, or professional experience are invented.
+""",encoding="utf-8")
+
+zip_path=Path("/mnt/data/akshat-reference-recreation-portfolio.zip")
+if zip_path.exists(): zip_path.unlink()
+with zipfile.ZipFile(zip_path,"w",zipfile.ZIP_DEFLATED) as z:
+    for f in root.rglob("*"):
+        if f.is_file():
+            z.write(f,f.relative_to(root))
+print(zip_path)

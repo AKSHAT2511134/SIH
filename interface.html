@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PashuSetu — Digital Livestock Compliance Portal</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', -apple-system, sans-serif;
+    background: #F8FAFC;
+    color: #1F2A24;
+    min-height: 100vh;
+  }
+
+  /* NAVBAR */
+  nav {
+    background: #fff;
+    border-bottom: 1px solid #E5E7EB;
+    padding: 0 32px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #1B2A4A;
+  }
+  .logo-mark {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #1B2A4A, #2F4A3C);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .logo-text {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .logo-text span { color: #B8863B; }
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none;
+    color: #5B6560;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.15s;
+  }
+  .nav-links a:hover { color: #1B2A4A; }
+  .btn {
+    padding: 9px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-primary {
+    background: #1B2A4A;
+    color: #fff;
+  }
+  .btn-primary:hover { background: #0F1A2E; transform: translateY(-1px); }
+  .btn-ghost {
+    background: transparent;
+    color: #1B2A4A;
+    border: 1.5px solid #D9DEE8;
+  }
+  .btn-ghost:hover { border-color: #1B2A4A; }
+  .btn-accent {
+    background: #B8863B;
+    color: #fff;
+  }
+  .btn-accent:hover { background: #8B6525; }
+  .nav-cta { display: flex; gap: 10px; }
+
+  /* HERO */
+  .hero {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 64px 32px 48px;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 56px;
+    align-items: center;
+  }
+  .kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #FDE8C7;
+    color: #8B6525;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  .kicker-dot {
+    width: 6px;
+    height: 6px;
+    background: #B8863B;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .hero h1 {
+    font-size: 48px;
+    line-height: 1.1;
+    color: #1B2A4A;
+    font-weight: 800;
+    letter-spacing: -1.2px;
+    margin-bottom: 18px;
+  }
+  .hero h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, #2F4A3C, #B8863B);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero p {
+    font-size: 17px;
+    line-height: 1.6;
+    color: #5B6560;
+    margin-bottom: 28px;
+    max-width: 520px;
+  }
+  .hero-cta {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+  }
+  .stats-row {
+    display: flex;
+    gap: 32px;
+    padding-top: 28px;
+    border-top: 1px solid #E5E7EB;
+  }
+  .stat-num {
+    font-size: 26px;
+    font-weight: 800;
+    color: #1B2A4A;
+    line-height: 1;
+  }
+  .stat-num.accent { color: #B8863B; }
+  .stat-num.green { color: #2F4A3C; }
+  .stat-label {
+    font-size: 12px;
+    color: #5B6560;
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  /* HERO CARD (SIMULATED APP PREVIEW) */
+  .preview-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 24px 60px rgba(27, 42, 74, 0.12), 0 1px 0 rgba(255,255,255,0.8) inset;
+    padding: 24px;
+    border: 1px solid #E5E7EB;
+    position: relative;
+  }
+  .preview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #F2F2EF;
+    margin-bottom: 20px;
+  }
+  .preview-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .avatar {
+    width: 38px;
+    height: 38px;
+    background: linear-gradient(135deg, #2F4A3C, #1B2A4A);
+    border-radius: 10px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .preview-title-text h3 {
+    font-size: 15px;
+    color: #1B2A4A;
+    font-weight: 700;
+  }
+  .preview-title-text p {
+    font-size: 12px;
+    color: #5B6560;
+    font-weight: 500;
+  }
+  .status-badge {
+    padding: 5px 12px;
+    background: #DCE8DE;
+    color: #2F4A3C;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .status-badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: #2F4A3C;
+    border-radius: 50%;
+  }
+  .animal-card {
+    background: linear-gradient(135deg, #F8FAFC 0%, #F2F2EF 100%);
+    border-radius: 14px;
+    padding: 18px;
+    border: 1px solid #E5E7EB;
+    margin-bottom: 16px;
+  }
+  .animal-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+  .animal-info h4 {
+    font-size: 16px;
+    color: #1B2A4A;
+    font-weight: 700;
+    margin-bottom: 3px;
+  }
+  .animal-info p {
+    font-size: 12px;
+    color: #5B6560;
+    font-weight: 500;
+  }
+  .animal-tag {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    background: #fff;
+    padding: 4px 9px;
+    border-radius: 6px;
+    border: 1px solid #D9DEE8;
+    color: #1B2A4A;
+    font-weight: 700;
+  }
+  .withdrawal-track {
+    margin-top: 12px;
+  }
+  .withdrawal-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+  .withdrawal-label span:first-child { color: #5B6560; font-weight: 500; }
+  .withdrawal-label span:last-child { color: #2F4A3C; font-weight: 700; }
+  .progress-bar {
+    height: 8px;
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid #E5E7EB;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 68%;
+    background: linear-gradient(90deg, #2F4A3C, #B8863B);
+    border-radius: 20px;
+    transition: width 1s ease;
+  }
+  .withdrawal-countdown {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: #fff;
+    border-radius: 10px;
+    border: 1px solid #DCE8DE;
+  }
+  .countdown-text {
+    font-size: 12px;
+    color: #2F4A3C;
+    font-weight: 600;
+  }
+  .countdown-date {
+    font-size: 11px;
+    color: #5B6560;
+  }
+  .qr-box {
+    width: 44px;
+    height: 44px;
+    background: #fff;
+    border: 1.5px solid #1B2A4A;
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    padding: 6px;
+    gap: 2px;
+  }
+  .qr-box > div:nth-child(1), .qr-box > div:nth-child(3),
+  .qr-box > div:nth-child(7), .qr-box > div:nth-child(5),
+  .qr-box > div:nth-child(9) { background: #1B2A4A; border-radius: 1px; }
+  .quick-actions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .action-btn {
+    background: #fff;
+    border: 1px solid #E5E7EB;
+    border-radius: 10px;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .action-btn:hover {
+    border-color: #1B2A4A;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(27,42,74,0.08);
+  }
+  .action-icon {
+    width: 36px;
+    height: 36px;
+    margin: 0 auto 8px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  .action-btn:nth-child(1) .action-icon { background: #DBEAFE; }
+  .action-btn:nth-child(2) .action-icon { background: #DCE8DE; }
+  .action-btn:nth-child(3) .action-icon { background: #FDE8C7; }
+  .action-label {
+    font-size: 12px;
+    color: #1B2A4A;
+    font-weight: 600;
+  }
+
+  /* ROLE SELECTOR STRIP */
+  .roles-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 32px 64px;
+  }
+  .roles-head {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .roles-head h2 {
+    font-size: 28px;
+    color: #1B2A4A;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+  .roles-head p {
+    color: #5B6560;
+    font-size: 15px;
+  }
+  .roles-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+  }
+  .role-card {
+    background: #fff;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 14px;
+    padding: 22px 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .role-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 3px;
+    background: #1B2A4A;
+    transform: scaleX(0);
+    transition: transform 0.2s;
+  }
+  .role-card:hover {
+    border-color: #1B2A4A;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(27,42,74,0.1);
+  }
+  .role-card:hover::after { transform: scaleX(1); }
+  .role-card:nth-child(2):hover { border-color: #2F4A3C; }
+  .role-card:nth-child(2)::after { background: #2F4A3C; }
+  .role-card:nth-child(3):hover { border-color: #B8863B; }
+  .role-card:nth-child(3)::after { background: #B8863B; }
+  .role-card:nth-child(4):hover { border-color: #4338CA; }
+  .role-card:nth-child(4)::after { background: #4338CA; }
+  .role-card:nth-child(5):hover { border-color: #DC2626; }
+  .role-card:nth-child(5)::after { background: #DC2626; }
+  .role-emoji {
+    font-size: 30px;
+    margin-bottom: 14px;
+  }
+  .role-card h3 {
+    font-size: 15px;
+    color: #1B2A4A;
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
+  .role-card p {
+    font-size: 12px;
+    color: #5B6560;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #1B2A4A;
+    color: #8E9BB3;
+    padding: 28px 32px;
+    text-align: center;
+    font-size: 13px;
+  }
+  footer strong { color: #C7D0E0; }
+
+  /* RESPONSIVE */
+  @media (max-width: 960px) {
+    .hero { grid-template-columns: 1fr; padding: 40px 24px; gap: 40px; }
+    .hero h1 { font-size: 36px; }
+    .roles-grid { grid-template-columns: repeat(2, 1fr); }
+    .nav-links { display: none; }
+  }
+  @media (max-width: 520px) {
+    .nav-inner { padding: 0; }
+    nav { padding: 0 16px; }
+    .nav-cta .btn-ghost { display: none; }
+    .hero { padding: 28px 18px; }
+    .hero h1 { font-size: 30px; }
+    .roles-section { padding: 0 18px 40px; }
+    .roles-grid { grid-template-columns: 1fr; }
+    .stats-row { gap: 18px; flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="#">
+      <div class="logo-mark">🐄</div>
+      <div class="logo-text">Pashu<span>Setu</span></div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#roles">Roles</a></li>
+      <li><a href="#dashboard">Dashboard</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="login.html" class="btn btn-ghost">Sign In</a>
+      <a href="#" class="btn btn-primary">Get Started →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-left">
+    
+    <h1>Trace every dose.<br/>Protect every <em>drop of milk.</em></h1>
+    <p>PashuSetu builds a digital bridge between livestock antibiotic treatment records and point-of-sale compliance — protecting farmers, consumers, and India's AMR surveillance mission.</p>
+    <div class="hero-cta">
+      <a href="#roles" class="btn btn-primary">Enter Portal</a>
+      
+    </div>
+    <div class="stats-row">
+      <div>
+        <div class="stat-num">35.68Cr</div>
+        <div class="stat-label">Pashu Aadhaar Tags</div>
+      </div>
+      <div>
+        <div class="stat-num green">5</div>
+        <div class="stat-label">Status Checks</div>
+      </div>
+      <div>
+        <div class="stat-num accent">100%</div>
+        <div class="stat-label">Rule-Based Engine</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIVE APP PREVIEW CARD -->
+  <div class="preview-card">
+    <div class="preview-header">
+      <div class="preview-title">
+        <div class="avatar">AKD</div>
+        <div class="preview-title-text">
+          <h3>Akshat Kumar Dwivedi</h3>
+          <p>Farmer · Kanpur Dehat</p>
+        </div>
+      </div>
+      <div class="status-badge" id="watch-badge">0 Animals Under Watch</div>
+    </div>
+
+    <!-- ANIMAL CARD -->
+    <div class="animal-card" id="landing-animal-card">
+      <div class="animal-row">
+        <div class="animal-info">
+          <h4 id="preview-animal-name">Loading...</h4>
+          <p id="preview-animal-tag">Tag: --</p>
+        </div>
+        <div class="animal-tag" id="preview-animal-code">#--</div>
+      </div>
+      <div class="withdrawal-track">
+        <div class="withdrawal-label">
+          <span id="preview-progress-label">Withdrawal Progress</span>
+          <span id="preview-progress-percent">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="preview-progress-fill" style="width:0%;"></div>
+        </div>
+      </div>
+      <div class="withdrawal-countdown">
+        <div>
+          <div class="countdown-text" id="preview-countdown-text">Computing...</div>
+          <div class="countdown-date" id="preview-countdown-date">Please wait</div>
+        </div>
+        <div class="qr-box" id="preview-qr-box">
+          <div></div><div></div><div></div>
+          <div></div><div></div><div></div>
+          <div></div><div></div><div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="quick-actions">
+      <div class="action-btn" onclick="window.location.href='farmer-dashboard.html#new-treatment-form'">
+        <div class="action-icon">📋</div>
+        <div class="action-label">New<br/>Treatment</div>
+      </div>
+      <div class="action-btn" onclick="window.location.href='farmer-dashboard.html#animals'">
+        <div class="action-icon">👨‍⚕️</div>
+        <div class="action-label">Vet<br/>Prescription</div>
+      </div>
+      <div class="action-btn" onclick="window.location.href='farmer-dashboard.html'">
+        <div class="action-icon">📊</div>
+        <div class="action-label">AMU<br/>Dashboard</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROLES SECTION -->
+<section class="roles-section" id="roles">
+  <div class="roles-head">
+    <h2>Select your entry point</h2>
+    <p>One platform, five tailored workflows — pick who you are to continue</p>
+  </div>
+  <div class="roles-grid">
+    <a href="farmer-dashboard.html" class="role-card" style="text-decoration:none; color:inherit;">
+      <div class="role-emoji">👨‍🌾</div>
+      <h3>Farmer</h3>
+      <p>Log treatments, view live withdrawal countdowns, and track your animals.<br><b style="color:#2F4A3C;">→ Open Dashboard</b></p>
+    </a>
+    <a href="vet-dashboard.html" class="role-card" style="text-decoration:none; color:inherit;">
+      <div class="role-emoji">👨‍⚕️</div>
+      <h3>Veterinarian</h3>
+      <p>Write digitally-signed prescriptions with validated drug databases.<br><b style="color:#2F4A3C;">→ Open Console</b></p>
+    </a>
+    <a href="collector-dashboard.html" class="role-card"  style="text-decoration:none; color:inherit;">
+      <div class="role-emoji">🏭</div>
+      <h3>Dairy / Procurement</h3>
+      <p>Scan QR or ID at intake — instant eligibility status at point of sale.<br><b style="color:#2F4A3C;">→ Open Console</b></p>
+    </a>
+    
+    <a href="government-dashboared.html" class="role-card"  style="text-decoration:none; color:inherit;">
+      <div class="role-emoji">🏛️</div>
+      <h3>Government</h3>
+      <p>AMU dashboards, risk-based inspection, and AMR hotspot surveillance.<br><b style="color:#2F4A3C;">→ Open Dashboard</b></p>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <strong>PashuSetu</strong> — Built on Bharat Pashudhan · Compliance data never stored in QR · CDSCO/FSSAI referenced
+</footer>
+
+<!-- Core models and dynamic landing bindings -->
+<script src="js/database.js"></script>
+<script src="js/compliance-engine.js"></script>
+<script src="js/landing.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PashuSetu — Collector Console</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', -apple-system, sans-serif;
+    background: #F5F3FB;
+    color: #1F2A24;
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: 100vh;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    background: #241947;
+    color: #fff;
+    padding: 16px 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 20px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .logo-mark {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #7C3AED, #B8863B);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  .logo-text { font-size: 17px; font-weight: 700; }
+  .logo-text span { color: #C4B5FD; }
+
+  .user-card {
+    margin: 20px;
+    padding: 14px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .avatar {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #7C3AED, #241947);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    color: #fff;
+  }
+  .user-info h4 { font-size: 13.5px; margin-bottom: 2px; }
+  .user-info p { font-size: 10.5px; color: #B0A6D9; }
+
+  .nav-section { padding: 18px 12px 0; }
+  .nav-title {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #6E5F9E;
+    padding: 0 12px 8px;
+    font-weight: 700;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 10px 12px;
+    margin: 2px 0;
+    border-radius: 8px;
+    font-size: 13.5px;
+    color: #D3CBEC;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .nav-item.active {
+    background: linear-gradient(90deg, rgba(196,181,253,0.25), rgba(196,181,253,0.05));
+    color: #fff;
+    border-left: 3px solid #C4B5FD;
+  }
+  .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+
+  .nav-shortcut {
+    background: rgba(255,255,255,0.04) !important;
+    border: 1px solid rgba(255,255,255,0.06) !important;
+    font-size: 12.5px !important;
+    padding: 9px 12px !important;
+    margin: 4px 0 !important;
+    border-radius: 10px !important;
+  }
+  .nav-shortcut:hover {
+    background: rgba(124,58,237,0.25) !important;
+    border-color: rgba(124,58,237,0.5) !important;
+  }
+  .nav-shortcut .nav-icon {
+    background: rgba(255,255,255,0.08);
+    width: 26px !important;
+    height: 26px;
+    border-radius: 7px;
+    font-size: 11px !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 4px;
+  }
+
+  /* MAIN */
+  .main { display: flex; flex-direction: column; min-width: 0; }
+  .topbar {
+    background: #fff;
+    border-bottom: 1px solid #E5E7EB;
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #5B6560;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid #E5E7EB;
+    white-space: nowrap;
+  }
+  .back-btn:hover { border-color: #7C3AED; color: #7C3AED; }
+  .page-title h1 { font-size: 20px; color: #241947; font-weight: 700; }
+  .page-title p { font-size: 12px; color: #5B6560; margin-top: 2px; }
+
+  .topbar-right { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .btn-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 14px;
+    border-radius: 8px;
+    background: #241947;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+  }
+  .btn-switch:hover { background: #34285F; }
+
+  .content { padding: 24px 28px; }
+
+  /* STATS */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 18px;
+    border: 1px solid #E5E7EB;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: #7C3AED;
+  }
+  .stat-card:nth-child(2)::before { background: #10B981; }
+  .stat-card:nth-child(3)::before { background: #EF4444; }
+  .stat-card:nth-child(4)::before { background: #B8863B; }
+  .stat-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    margin-bottom: 12px;
+    background: #F1EBFC;
+  }
+  .stat-card:nth-child(2) .stat-icon { background: #D1FAE5; }
+  .stat-card:nth-child(3) .stat-icon { background: #FEE2E2; }
+  .stat-card:nth-child(4) .stat-icon { background: #FDF0DD; }
+  .stat-num { font-size: 28px; font-weight: 800; color: #241947; line-height: 1; }
+  .stat-label { font-size: 12px; color: #5B6560; font-weight: 500; margin-top: 6px; }
+
+  /* SCAN PANEL */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid #E5E7EB;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .card-head {
+    padding: 18px 20px;
+    border-bottom: 1px solid #F0F4F8;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .card-head h3 { font-size: 15px; color: #241947; font-weight: 700; }
+  .card-head p { font-size: 11.5px; color: #5B6560; margin-top: 2px; }
+  .card-body { padding: 20px; }
+
+  .scan-input-row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .scan-input-row select {
+    flex: 1;
+    padding: 12px 13px;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 9px;
+    font-size: 13.5px;
+    font-family: inherit;
+    color: #241947;
+    outline: none;
+    background: #fff;
+  }
+  .scan-input-row select:focus { border-color: #7C3AED; }
+  .btn-scan {
+    padding: 12px 22px;
+    border-radius: 9px;
+    border: none;
+    background: #7C3AED;
+    color: #fff;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .btn-scan:hover { background: #6D28D9; }
+  .scan-hint { font-size: 11px; color: #8E9BB3; margin-bottom: 18px; }
+
+  .qr-mock-box {
+    width: 130px;
+    height: 130px;
+    margin: 8px auto 18px;
+    background: #fff;
+    border: 2px dashed #D9CFF2;
+    border-radius: 12px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(7, 1fr);
+    gap: 3px;
+    padding: 12px;
+  }
+  .qr-mock-box > div { border-radius: 1px; }
+
+  /* DECISION PANEL */
+  #decision-panel {
+    display: none;
+    border-radius: 14px;
+    padding: 22px;
+    text-align: center;
+  }
+  #decision-panel.compliant {
+    background: linear-gradient(135deg, #ECFDF5, #fff);
+    border: 1.5px solid #A7F3D0;
+  }
+  #decision-panel.blocked {
+    background: linear-gradient(135deg, #FEF2F2, #fff);
+    border: 1.5px solid #FECACA;
+  }
+  .decision-icon { font-size: 40px; margin-bottom: 8px; }
+  .decision-title { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+  #decision-panel.compliant .decision-title { color: #065F46; }
+  #decision-panel.blocked .decision-title { color: #991B1B; }
+  .decision-sub { font-size: 12.5px; color: #5B6560; margin-bottom: 16px; }
+  .decision-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    text-align: left;
+    background: rgba(255,255,255,0.6);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 16px;
+    font-size: 12px;
+  }
+  .decision-detail-grid b { display: block; color: #241947; margin-bottom: 2px; }
+  .decision-actions { display: flex; gap: 10px; justify-content: center; }
+  .btn-sm {
+    padding: 9px 18px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-confirm { background: #10B981; color: #fff; }
+  .btn-confirm:hover { background: #0D9F71; }
+  .btn-reject { background: #EF4444; color: #fff; }
+  .btn-reject:hover { background: #DC2626; }
+  .btn-outline { background: transparent; color: #5B6560; border: 1.5px solid #D9DEE8; }
+  .btn-outline:hover { background: #F8FAFC; }
+
+  .empty-scan {
+    text-align: center;
+    color: #8E9BB3;
+    font-size: 12.5px;
+    padding: 30px 10px;
+  }
+
+  /* TABLE */
+  .tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .tbl thead th {
+    text-align: left;
+    padding: 12px 14px;
+    background: #F8FAFC;
+    color: #5B6560;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-bottom: 1px solid #E5E7EB;
+  }
+  .tbl tbody td {
+    padding: 14px 14px;
+    border-bottom: 1px solid #F0F4F8;
+    color: #1F2A24;
+    font-weight: 500;
+    vertical-align: top;
+  }
+  .tbl tbody tr:last-child td { border-bottom: none; }
+  .tbl tbody tr:hover { background: #F8FAFC; }
+  .tbl-date { font-size: 11px; color: #5B6560; margin-top: 2px; }
+  .empty-row td { text-align: center; padding: 26px 14px; color: #8E9BB3; font-size: 12.5px; }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-size: 10.5px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .pill-green { background: #D1FAE5; color: #065F46; }
+  .pill-red { background: #FEE2E2; color: #991B1B; }
+
+  @media (max-width: 1180px) { .stats-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 1000px) { .grid-2 { grid-template-columns: 1fr; } }
+  @media (max-width: 780px) {
+    body { grid-template-columns: 1fr; }
+    .sidebar { position: static; height: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">🥛</div>
+    <div class="logo-text">Pashu<span>Setu</span></div>
+  </div>
+
+  <div class="user-card">
+    <div class="avatar">MD</div>
+    <div class="user-info">
+      <h4>Milma Dairy Collector</h4>
+      <p>Collector · Booth #07</p>
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-title">Collection Console</div>
+    <a class="nav-item active" href="#">
+      <span class="nav-icon">📷</span> Scan &amp; Verify
+    </a>
+    <a class="nav-item" href="farmer-dashboard.html" target="_blank">
+      <span class="nav-icon">🌾</span> Farmer Overview
+    </a>
+    <a class="nav-item" href="government-dashboared.html" target="_blank">
+      <span class="nav-icon">🏛️</span> Gov Analytics
+    </a>
+  </div>
+
+  <div class="nav-section" style="margin-top:auto;">
+    <div class="nav-title">Cross-Page Switches</div>
+    <a class="nav-item nav-shortcut" href="vet-dashboard.html">
+      <span class="nav-icon" style="color:#0D9488;">VC</span>
+      Vet Console
+    </a>
+    <a class="nav-item nav-shortcut" href="farmer-dashboard.html">
+      <span class="nav-icon" style="color:#DCE8DE;">FD</span>
+      Farmer Dashboard
+    </a>
+    <a class="nav-item nav-shortcut" href="interface.html">
+      <span class="nav-icon" style="color:#B8863B;">LH</span>
+      Landing Portal Home
+    </a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <a href="interface.html" class="back-btn">← Back to Portal Home</a>
+    <div class="page-title" style="text-align:center;">
+      <h1>Collector Scan &amp; Compliance Console</h1>
+      <p>Point-of-collection eligibility check · QR / Pashu Aadhaar verification</p>
+    </div>
+    <div class="topbar-right">
+      <a href="vet-dashboard.html" class="btn-switch" style="background:#0D9488;">🩺 Vet Console</a>
+      <a href="govt-dashboard.html" class="btn-switch" style="background:#4C3F91;">🏛️ Gov Dashboard</a>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">📷</div>
+        <div class="stat-num" id="stat-scans-today">0</div>
+        <div class="stat-label">Scans Today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <div class="stat-num" id="stat-compliant-today">0</div>
+        <div class="stat-label">Compliant &amp; Procured</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🚫</div>
+        <div class="stat-num" id="stat-blocked-today">0</div>
+        <div class="stat-label">Blocked / Rejected</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📋</div>
+        <div class="stat-num" id="stat-total-log">0</div>
+        <div class="stat-label">Total Records on File</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <!-- SCAN PANEL -->
+      <div class="card" style="margin-bottom:0;">
+        <div class="card-head">
+          <div>
+            <h3>📷 Scan Animal QR / Tag</h3>
+            <p>Simulated scanner — select the registered animal to check</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="qr-mock-box" id="scan-qr-box"></div>
+          <div class="scan-input-row">
+            <select id="scan-animal-select">
+              <option value="">-- Select Animal to Scan --</option>
+            </select>
+          </div>
+          <div class="scan-hint">In production this reads the Pashu Aadhaar QR printed on the farmer's certificate. Here, pick the animal to simulate a scan.</div>
+          <button class="btn-scan" id="btn-run-scan" style="width:100%;">🔍 Run Compliance Scan</button>
+        </div>
+      </div>
+
+      <!-- DECISION PANEL -->
+      <div class="card" style="margin-bottom:0;">
+        <div class="card-head">
+          <div>
+            <h3>Compliance Decision</h3>
+            <p>Result of the most recent scan</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="empty-scan" id="empty-scan-msg">Run a scan to see the compliance decision here.</div>
+          <div id="decision-panel">
+            <div class="decision-icon" id="decision-icon">✅</div>
+            <div class="decision-title" id="decision-title">Compliant</div>
+            <div class="decision-sub" id="decision-sub">Cleared for procurement</div>
+            <div class="decision-detail-grid" id="decision-detail-grid"></div>
+            <div class="decision-actions">
+              <button class="btn-sm btn-confirm" id="btn-confirm-procure" style="display:none;">✅ Confirm Procurement</button>
+              <button class="btn-sm btn-reject" id="btn-confirm-block" style="display:none;">🚫 Log Rejection</button>
+              <button class="btn-sm btn-outline" id="btn-scan-clear">Clear</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLLECTION LOG -->
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h3>📒 Collection &amp; Rejection Log</h3>
+          <p>Full audit trail of every scan at this booth, most recent first</p>
+        </div>
+      </div>
+      <div class="card-body" style="padding:0;">
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th>Animal</th>
+              <th>Scanned At</th>
+              <th>Decision</th>
+              <th>Reason</th>
+            </tr>
+          </thead>
+          <tbody id="collection-log-tbody">
+            <!-- Dynamic -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="js/database.js"></script>
+<script src="js/compliance-engine.js"></script>
+
+<script>
+  (function() {
+    const scanSelect = document.getElementById("scan-animal-select");
+    const scanQrBox = document.getElementById("scan-qr-box");
+    const btnRunScan = document.getElementById("btn-run-scan");
+    const emptyScanMsg = document.getElementById("empty-scan-msg");
+    const decisionPanel = document.getElementById("decision-panel");
+    const decisionIcon = document.getElementById("decision-icon");
+    const decisionTitle = document.getElementById("decision-title");
+    const decisionSub = document.getElementById("decision-sub");
+    const decisionGrid = document.getElementById("decision-detail-grid");
+    const btnConfirmProcure = document.getElementById("btn-confirm-procure");
+    const btnConfirmBlock = document.getElementById("btn-confirm-block");
+    const btnScanClear = document.getElementById("btn-scan-clear");
+    const logTbody = document.getElementById("collection-log-tbody");
+
+    const statScansToday = document.getElementById("stat-scans-today");
+    const statCompliantToday = document.getElementById("stat-compliant-today");
+    const statBlockedToday = document.getElementById("stat-blocked-today");
+    const statTotalLog = document.getElementById("stat-total-log");
+
+    let currentScanResult = null; // { animal, status, decision, reason }
+
+    window.addEventListener("load", () => {
+      populateAnimalSelect();
+      renderQrBox(null);
+      renderLog();
+      renderStats();
+
+      btnRunScan.addEventListener("click", runScan);
+      btnScanClear.addEventListener("click", resetScanPanel);
+      btnConfirmProcure.addEventListener("click", () => confirmDecision("Compliant"));
+      btnConfirmBlock.addEventListener("click", () => confirmDecision("Blocked"));
+      scanSelect.addEventListener("change", () => renderQrBox(scanSelect.value));
+    });
+
+    function populateAnimalSelect() {
+      const animals = DB.getAnimals();
+      scanSelect.innerHTML = '<option value="">-- Select Animal to Scan --</option>';
+      animals.forEach(a => {
+        const opt = document.createElement("option");
+        opt.value = a.id;
+        opt.textContent = `${a.name} (#${a.id}) — ${a.pashu_aadhaar}`;
+        scanSelect.appendChild(opt);
+      });
+    }
+
+    function renderQrBox(animalId) {
+      scanQrBox.innerHTML = "";
+      let seed = 4242;
+      if (animalId) {
+        const digits = animalId.replace(/\D/g, "");
+        seed = digits ? parseInt(digits) * 7823 : animalId.charCodeAt(0) * 8923;
+      }
+      let s = seed;
+      for (let i = 0; i < 49; i++) {
+        const div = document.createElement("div");
+        s = (s * 9301 + 49297) % 233280;
+        const rnd = s / 233280;
+        div.style.background = rnd > 0.5 ? "#7C3AED" : "transparent";
+        scanQrBox.appendChild(div);
+      }
+    }
+
+    function runScan() {
+      const animalId = scanSelect.value;
+      if (!animalId) {
+        alert("Select an animal to scan first.");
+        return;
+      }
+
+      const animals = DB.getAnimals();
+      const treatments = DB.getTreatments();
+      const labResults = DB.getLabResults();
+      const animal = animals.find(a => a.id === animalId);
+
+      const status = ComplianceEngine.evaluateAnimalStatus(animal, treatments, labResults);
+      const isCompliant = status.status === "Eligible — Compliant" || status.status === "Lab-verified compliant" || status.status === "No Active Treatment";
+      const decision = isCompliant ? "Compliant" : "Blocked";
+
+      let reason;
+      if (decision === "Compliant") {
+        reason = status.status === "No Active Treatment" ? "No active treatment on record." : "Withdrawal period cleared — safe to procure.";
+      } else if (status.status === "Blocked — Non-Compliant") {
+        reason = status.details || "Lab test detected residue above MRL.";
+      } else if (status.status === "Manual Review Required") {
+        reason = status.countdown || "Off-label treatment flagged for veterinary review.";
+      } else {
+        reason = status.countdown ? `Still within withdrawal period — ${status.countdown}` : "Still within withdrawal period.";
+      }
+
+      currentScanResult = { animal, status, decision, reason };
+      showDecision(currentScanResult);
+    }
+
+    function showDecision(result) {
+      emptyScanMsg.style.display = "none";
+      decisionPanel.style.display = "block";
+      decisionPanel.className = result.decision === "Compliant" ? "compliant" : "blocked";
+
+      decisionIcon.textContent = result.decision === "Compliant" ? "✅" : "🚫";
+      decisionTitle.textContent = result.decision === "Compliant" ? "Compliant" : "Blocked";
+      decisionSub.textContent = result.decision === "Compliant" ? "Cleared for procurement" : "Not eligible — do not procure";
+
+      decisionGrid.innerHTML = `
+        <div><b>Animal</b>${result.animal.name} (#${result.animal.id})</div>
+        <div><b>Tag</b>${result.animal.pashu_aadhaar}</div>
+        <div><b>Status</b>${result.status.status}</div>
+        <div><b>Reason</b>${result.reason}</div>
+      `;
+
+      btnConfirmProcure.style.display = result.decision === "Compliant" ? "inline-block" : "none";
+      btnConfirmBlock.style.display = result.decision === "Blocked" ? "inline-block" : "none";
+    }
+
+    function confirmDecision(decision) {
+      if (!currentScanResult) return;
+
+      const records = DB.getCollectionRecords();
+      records.unshift({
+        id: `COL-${Date.now()}`,
+        animal_id: currentScanResult.animal.id,
+        animal_name: currentScanResult.animal.name,
+        scanned_at: new Date().toISOString(),
+        decision: decision,
+        reason: currentScanResult.reason
+      });
+      DB.saveCollectionRecords(records);
+
+      // If confirmed compliant, add a notification back to the farmer (mirrors existing pattern)
+      if (decision === "Compliant") {
+        const notifications = DB.getNotifications();
+        notifications.unshift({
+          id: `NF-COL-${Date.now()}`,
+          icon: "✅",
+          class: "ni-green",
+          title: `${currentScanResult.animal.name} cleared at collection`,
+          body: `Milk procured after successful compliance scan at Booth #07.`,
+          time: "Just now",
+          unread: true
+        });
+        DB.saveNotifications(notifications);
+      }
+
+      resetScanPanel();
+      renderLog();
+      renderStats();
+    }
+
+    function resetScanPanel() {
+      currentScanResult = null;
+      scanSelect.value = "";
+      renderQrBox(null);
+      decisionPanel.style.display = "none";
+      emptyScanMsg.style.display = "block";
+    }
+
+    function renderLog() {
+      const records = DB.getCollectionRecords();
+      logTbody.innerHTML = "";
+
+      if (records.length === 0) {
+        logTbody.innerHTML = `<tr class="empty-row"><td colspan="4">No scans recorded yet at this booth.</td></tr>`;
+        return;
+      }
+
+      records.forEach(r => {
+        const tr = document.createElement("tr");
+        const dt = new Date(r.scanned_at);
+        tr.innerHTML = `
+          <td><strong>${r.animal_name}</strong><div class="tbl-date">#${r.animal_id}</div></td>
+          <td>${dt.toLocaleDateString()} <div class="tbl-date">${dt.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div></td>
+          <td><span class="status-pill ${r.decision === 'Compliant' ? 'pill-green' : 'pill-red'}">${r.decision === 'Compliant' ? '✅ Compliant' : '🚫 Blocked'}</span></td>
+          <td>${r.reason}</td>
+        `;
+        logTbody.appendChild(tr);
+      });
+    }
+
+    function renderStats() {
+      const records = DB.getCollectionRecords();
+      const todayStr = new Date().toDateString();
+      const todayRecords = records.filter(r => new Date(r.scanned_at).toDateString() === todayStr);
+
+      statScansToday.textContent = todayRecords.length;
+      statCompliantToday.textContent = todayRecords.filter(r => r.decision === "Compliant").length;
+      statBlockedToday.textContent = todayRecords.filter(r => r.decision === "Blocked").length;
+      statTotalLog.textContent = records.length;
+    }
+  })();
+</script>
+</body>
+</html>
